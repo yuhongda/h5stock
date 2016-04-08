@@ -283,7 +283,7 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 					var width = ele.canvas.width , height = ele.canvas.height;
 					ele.cr(0,0,width,height);
 				}catch(e){
-					console.log(ele.selector+':为非');
+					//console.log(ele.selector+':为非');
 				}
 			});
 			
@@ -535,12 +535,13 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 			C.draw_line(C.canvasBox.top.box,cache.p, '#005dd8');
 			
 			if(C.type!='i'){
-				setTimeout(function(){
+				clearTimeout(Tool.draw_line_av_time)
+				Tool.draw_line_av_time = setTimeout(function(){
 					C.draw_line(C.canvasBox.top.av , cache.av , '#f79d00')
 				},800);
 			};
-			
-			setTimeout(function(){
+			clearTimeout(Tool.draw_ftline_time)
+			Tool.draw_ftline_time = setTimeout(function(){
 				C.draw_ftline(C.max_min(plan , 4))
 			},1000);
 		}
@@ -755,14 +756,15 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 			C.min = _mi;
 			$.each(['dMA5','dMA10','dMA20'],function( i , self ){
 				cache[self] = C.max_min(kline , i+6);
-				setTimeout(function(){
+				clearTimeout(Tool['ma'+self+'_time']);
+				Tool['ma'+self+'_time'] = setTimeout(function(){
 					C.drawMa(cache[self],i);
 				},i*500);
 				C.MA.eq(i).css({color:[C.yellow,C.purple,C.blue][i]})
 			});
 			
-			
-			setTimeout(function(){
+			clearTimeout(Tool.draw_ftline_kline_time);
+			Tool.draw_ftline_kline_time = setTimeout(function(){
 				C.draw_ftline(C.max_min(kline , 5),lw*.5,9)
 			},1000);
 			

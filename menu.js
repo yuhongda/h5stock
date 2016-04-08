@@ -13,22 +13,20 @@
 **/
 var Tool = {
 	init : function(){
-		 if(void 0 == Tool.getTitle()){
-			 Tool.setTitle(true)
-		 }
+		 
 	}
 	,getTitle : function(){
 		return JSON.parse(T.get_stor('MyMenuTitle'));
 	}
 	,setTitle : function( bool ){
-		T.set_stor( 'MyMenuTitle'  , JSON.stringify(bool) );
+		T.set_stor( 'MyMenuTitle'  , bool );
 		M.update();
 	}
 	,getNav : function(){
 		return JSON.parse(T.get_stor('MyMenuNav'));
 	}
 	,setNav : function( bool ){
-		T.set_stor( 'MyMenuNav'  , JSON.stringify(bool) );
+		T.set_stor( 'MyMenuNav'  , bool );
 		M.update();
 	}
 }
@@ -39,7 +37,7 @@ var Tool = {
 		Mymenu.elem.css({left:obj.left+'px',top:obj.top+'px'});
 		Mymenu.addEvent();
 		Mymenu.resize();
-		T.dele_stor('MyMenuPosition');
+		//T.dele_stor('MyMenuPosition');
 	}
 	,addEvent : function( ){
 		var  list = Mymenu.elem
@@ -52,8 +50,9 @@ var Tool = {
 		
 	}
 	,getPosition : function(){ //获取图标位置
+		
 		var size = T.get_stor('MyMenuPosition');
-		if(size){
+		if( void 0 != size){
 			return JSON.parse(size);
 		}else{
 			Mymenu.setPosition({left:M.width-50,top:M.height-50});
@@ -73,6 +72,7 @@ var Tool = {
 		this.moveX = 0;
 		this.moveY = 0;
 		this._move = true;
+		this._ismove = false;
 	}
 	,moveEvent : function(  e ){
 		if(!this._move) return;
@@ -86,6 +86,8 @@ var Tool = {
 			,h = M.height - r;
 		x = Math.abs( xPoint - this.firstX );
 		y = Math.abs( yPoint - this.firstY );
+		
+		this._ismove = true;
 		
 		this.moveX = xPoint - this.firstX;
 		this.moveY = yPoint - this.firstY;
@@ -110,7 +112,10 @@ var Tool = {
 	,upEvent : function(  e ){
 		this._move = false;
 		if(this.releaseCapture)this.releaseCapture();
-		Mymenu.setPosition({left:this.endX,top:this.endY})
+		if(this._ismove){
+			this._ismove = false;
+			Mymenu.setPosition({left:this.endX,top:this.endY})
+		}
 	}
 } 
 ,M = {
@@ -140,6 +145,7 @@ var Tool = {
 			menuClick = true;
 		});
 		Tool.init();
+		M.update();
 	}
 	,resize : function(){
 		M.width = Dome.width;
@@ -238,14 +244,12 @@ var Tool = {
 		console.log('hideNav')
 	}
 	,showTitle : function(){
-		console.log('showTitle')
 		M.dome.title.elem.prependTo(M.dome.content.elem);
 		Main.resize();
 	}
 	,hideTitle : function(){
 		M.dome.title.elem.remove();
 		Main.resize();
-		console.log('hideTitle')
 	}
 	,select : {//自选
 		

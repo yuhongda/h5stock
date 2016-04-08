@@ -11,17 +11,18 @@ i{ display:inline-block; vertical-align:middle; background:url(bg.png); backgrou
 .yellow{ color:#f79d00;}
 time,menu,nav{ display:block;}
 
-.stock-content,.stock-menu,.stock-f10 ul,.stock-ma,.kline,.stock-news,.stock-f10,.kline .stock-time ul,.stock-nav,.stock-data ul,.stock-pic .left,.stock-pic .right{ display:box; display:-webkit-box; -webkit-box-sizing:border-box; box-sizing:border-box; -webkit-box-orient:vertical; box-orient:vertical; }
+.option,.stock-menu,.stock-f10 ul,.stock-ma,.kline,.stock-news,.stock-f10,.kline .stock-time ul,.stock-nav,.stock-data ul,.stock-pic .left,.stock-pic .right{ display:box; display:-webkit-box; -webkit-box-sizing:border-box; box-sizing:border-box; -webkit-box-orient:vertical; box-orient:vertical; }
 #Stock-Wapper{ position:relative; z-index:1; width:100%; height:100%; border:1px solid #ddd; background:#fff; overflow:hidden; box-sizing:border-box; -webkit-box-sizing:border-box;}
 #Stock-Wapper.noborder{ border:none;}
 .kline{ position:relative; z-index:1; box-flex:1; -webkit-box-flex:1; padding:10px 10px 0;}
 
-.stock-content{ position:relative; z-index:9; width:100%; height:100%; transition-duration:.5s; -webkit-transition:.5s; background:#fff; }
+.stock-content{ position:relative; z-index:9; width:100%; height:100%; display:box; display:-webkit-box; box-orient:vertical; -webkit-box-orient:vertical; overflow:hidden; transition-duration:.5s; -webkit-transition:.5s;}
+.option{ box-flex:1; -webkit-box-flex:1; transition-duration:.5s; -webkit-transition:.5s; background:#fff; }
 .stock-column{ position:absolute; z-index:9; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,.1); box-shadow:-4px 0 4px rgba(0,0,0,.1) inset; display:box; box-pack:center; box-align: center;  display:-webkit-box; -webkit-box-pack:center;  -webkit-box-align: center;}
 .stock-mask{ position:absolute; z-index:8; left:0; top:0; width:60%; height:100%; box-shadow:-5px 0 5px #ccc inset; background:rgba(0,0,0,.5); transition-duration:.5s; -webkit-transition:.5s; opacity:0; }
 
 .stock-column .stock-list{ width:100%; padding-left:60%; box-sizing:border-box; -webkit-box-sizing:border-box; }
-.stock-column .stock-list p{ height:40px; line-height:40px; padding-left:25px; border-bottom:1px solid #ddd; box-shadow:0 1px 0 #eee; font-size:.875rem;}
+.stock-column .stock-list p{ transition:.3s; -webkit-transition:.3s; height:40px; line-height:40px; padding-left:25px; border-bottom:1px solid #ddd; box-shadow:0 1px 0 #eee; font-size:.875rem;}
 .stock-column .stock-list p.cur{ background:#bbb; color:white;}
 .stock-mask .jian{ position:absolute; top:50%; right:0; width:0; height:0; margin-top:-10px; border-top:10px solid transparent; border-right:15px solid #e6e6e6; border-bottom:10px solid transparent;}
 
@@ -39,7 +40,7 @@ h2.stock-h2 .name a{ color:#005dd8}
 .stock-data h3{ font-size:2rem; }
 
 .stock-menu{ -webkit-transition-duration:.5s; opacity:0; border-bottom:1px solid #ddd; border-top:10px solid #ececec; -webkit-transform:translateY(100px); position:relative; z-index:2; height:41px; -webkit-box-orient:horizontal;}
-.stock-menu .currentLine{ position:absolute; left:0; bottom:-1px; width:25%; height:1px; font:0/0 arial; transition-duration:.5s; -webkit-transition-duration:.5s; background:#f24638;}
+.stock-menu .currentLine,.stock-nav .currentLine{ position:absolute; left:0; bottom:-1px; width:25%; height:1px; font:0/0 arial; transition-duration:.5s; -webkit-transition-duration:.5s; background:#f24638;}
 .stock-menu li{ -webkit-box-flex:1; text-align:center; -webkit-box-sizing:border-box; -webkit-transition-duration:.5s; line-height:30px;}
 .stock-menu li.current{ color:#f24638; }
 .stock-menu li:focus{ outline:0;}
@@ -95,7 +96,8 @@ h2.stock-h2 .name a{ color:#005dd8}
 .stock-f10 ul:last-child{ height:20px; text-align:center; background:#f0f6ff;}
 .stock-f10 a.more{ display:block;  -webkit-box-flex:1;display:-webkit-box; -webkit-box-pack:center; -webkit-box-align:center;}
 
-.stock-nav{ width:100%; height:38px; line-height:38px; -webkit-box-orient:horizontal;}
-.stock-nav li{ width:33%; -webkit-box-flex:1; border-top:1px solid #c4c4c4; border-right:1px solid #c4c4c4; background:#eeeeee; text-align:center; -webkit-box-sizing:border-box;}
+.stock-nav{ width:100%; height:48px; line-height:38px; border-top:10px solid #ececec; background:#fff; box-orient:horizontal; -webkit-box-orient:horizontal;}
+.stock-nav li{ width:33%; box-flex:1; -webkit-box-flex:1; text-align:center; box-sizing:border-box; -webkit-box-sizing:border-box;}
+.stock-nav .currentLine{ width:25%; left:0; top:auto; right:auto; bottom:0;}
 .stock-nav li:last-child{ border-right:none;}
 .stock-nav li.current{ border-top:none; background:white;}

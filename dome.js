@@ -43,6 +43,7 @@
 			}
 			
 			D.elementEvent();
+			D.tabEvent();
 		}
 		,resize : function(){
 			var  elem =  D.element.elem
@@ -64,7 +65,8 @@
 				,title = $(['<h2 class="stock-h2">'
 						,"<div class='name'></div>"
 					,'</h2>'].join(''))
-				,content = $(['<article class="stock-content"></article>'].join(''))
+				,content = $('<article class="stock-content"></article>')
+				,options = $('<div class="option"></div>')
 				,top = $(["<section class='stock-data'>"
 						,"<ul>"
 							,"<li><h3></h3><p></p></li>"
@@ -243,6 +245,7 @@
 					,"</section>"
 				,"</article>"].join(''))	
 				,nav = $(["<nav class='stock-nav'>"
+					,"<div class='currentLine'></div>"
 					,"<li class='current'>走势图</li>"
 					,"<li>公司新闻</li>"
 					,"<li>公司资料</li>"
@@ -255,19 +258,23 @@
 				,mask = $('<div class="stock-mask"><div class="jian"></div></div>');
 			
 			content.append(title);
-			content.append(top);
-			content.append(stockNav);
+			content.append(options);
+			options.append(top);
+			options.append(stockNav);
 			
 			ptime.append(ma);
 			pic.append(line);
 			ptime.append(pic);
 			ptime.append(time);
 			
-			content.append(ptime);
+			options.append(ptime);
+			options.append(nav);
+			
 			menu.appendTo(ele);
 			mask.appendTo(ele);
 			mymenu.appendTo(ele);
 			content.appendTo(ele);
+			
 			
 			D.element = {
 				 elem : ele
@@ -282,6 +289,7 @@
 				,ma : { elem : ma , li : ma.find('li') }
 				,stockNav : {elem : stockNav , li : stockNav.find('li') , cur : stockNav.find('.currentLine') }
 				,content : { elem : content }
+				,options : { elem : options }
 				,time : { elem : time , li : time.find('li') }
 				,line : {
 					 elem : line
@@ -368,11 +376,28 @@
 				,nav : { //栏目
 					 elem : nav
 					,li : nav.find('li')
+					,cur : nav.find('.currentLine')
 				}
 				,menu : { elem : menu }
 				,column : { elem : mymenu , list : mymenu.find('.stock-list') }
 				,mask : { elem : mask }
 			};
+		}
+		,tabEvent : function(){
+			var  nav = D.element.nav.li
+				,cur = D.element.nav.cur
+				,width = D.width
+				,liwidth = width/nav.length
+				,left = 0 ;
+			cur.css({width:100/nav.length+'%'});
+			nav.each(function( i ){
+				this.onclick = function(){
+					nav.removeClass('current');
+					$(this).addClass('current');
+					left = liwidth*i;
+					cur.css3({transform:'translate3d('+left+'px,0,0)'})
+				}
+			});
 		}
 		,elementEvent : function(){
 			var  nav = D.element.stockNav.li
@@ -396,7 +421,7 @@
 				}
 			});
 		}
-		,currentCanvasTab : false //点吉的是否是当前TAB
+		,currentCanvasTab : false //点击的是否是当前TAB
 		,canvasTab : function( i ){ //分时 日K 周K 月K 界面切换
 			var  ele = D.element
 				,box = ele.canvasBox.box
