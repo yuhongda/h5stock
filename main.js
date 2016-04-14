@@ -166,7 +166,7 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 			C.footer_time = obj.time.li;
 			C.add();
 			
-			C.marginLeft = dome[0].offsetLeft+ C.pic[0].offsetLeft+parseInt(dome.css('border'))*2;//画板与左边的距离
+			C.marginLeft = dome[0].offsetLeft+ C.pic[0].offsetLeft+parseInt(dome.css('border')||0)*2;//画板与左边的距离
 			
 			for( key in obj.canvasBox.canvas ){
 				C.canvas[key] = obj.canvasBox.canvas[key];
@@ -607,9 +607,11 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 				,_w = 0 //cache.dk.w/2 为K线宽高的中间
 			
 			n = floor(move_x*C.line_w/w);
+			
 			_w = isPlan?0:cache.dk.w/2
 			
 			if(!D[n]){ n = n<=0?0:len-1}
+			
 			
 			l = ceil(n*lw+l+_w)
 			d = D[n];
@@ -633,7 +635,10 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 			C.h_line.lnum.text(d.l)
 			
 			C.h_line.rnum.css({display:(d.r?'block':'none')})
-			if(d.r){C.h_line.rnum.text(d.r+'%')}
+			if(void 0 != d.r){
+				C.h_line.rnum.text(d.r+'%')
+			}
+			
 			
 			vl = vl<=0?0:vl>=C.w-w?C.w-w:vl;
 			C.v_line.line.css({left:l+'px'})
@@ -833,7 +838,7 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 		,init : function(){
 			C.init(); //画图工具
 			//G.init(); //新闻工具
-			M.getName();
+			//M.getName();
 		}
 		,search : function( name , type  ){ //用于搜索
 			C.keyword = name || '000001'
@@ -847,8 +852,9 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 			C.site = void 0 == i?C.site:i;
 			var  ele = Dome.element
 				,box = ele.canvasBox.box
-				,left = -ele.canvasBox.elem.width()*C.site;
-			box.css3({transform:'translateX('+left+'px)'});
+				,gap = parseInt(ele.canvasBox.canvas.ptime.elem.css('margin-right'))
+				,left = -ele.canvasBox.elem.width()*C.site-gap*C.site;
+			box.css3({transform:'translate3d('+left+'px,0,0)'});
 			C.search();
 		}
 		,nav_tab : function( n ){

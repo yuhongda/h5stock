@@ -20,14 +20,14 @@ var Tool = {
 	}
 	,setTitle : function( bool ){
 		T.set_stor( 'MyMenuTitle'  , bool );
-		M.update();
+		M.resize();
 	}
 	,getNav : function(){
 		return JSON.parse(T.get_stor('MyMenuNav'));
 	}
 	,setNav : function( bool ){
 		T.set_stor( 'MyMenuNav'  , bool );
-		M.update();
+		M.resize();
 	}
 }
 ,Mymenu = {
@@ -36,7 +36,6 @@ var Tool = {
 		var obj = Mymenu.getPosition();
 		Mymenu.elem.css({left:obj.left+'px',top:obj.top+'px'});
 		Mymenu.addEvent();
-		Mymenu.resize();
 		//T.dele_stor('MyMenuPosition');
 	}
 	,addEvent : function( ){
@@ -47,7 +46,16 @@ var Tool = {
 		T.myAddListener(list,'mouseup',self.upEvent);
 	}
 	,resize : function(){
-		
+		var obj = Mymenu.getPosition()
+			,width = Dome.width-Mymenu.elem.width()-2
+			,height = Dome.height-Mymenu.elem.height()-2;
+		if(obj.left>width){
+			obj.left = width
+		}
+		if(obj.top>height){
+			obj.top = height;
+		}
+		Mymenu.elem.css({left:obj.left+'px',top:obj.top+'px'});
 	}
 	,getPosition : function(){ //获取图标位置
 		
@@ -120,21 +128,20 @@ var Tool = {
 } 
 ,M = {
 	init : function(){
-		M.resize();
 		M.dome = Dome.element
 		M.menu = Dome.element.menu.elem
 		M.column = Dome.element.column
-		M.content = Dome.element.content.elem;
+		M.content = Dome.element.stockCnt.elem;
 		M.mask = Dome.element.mask.elem;
 		
 		
 		Mymenu.init(M.menu);
 		M.addcolumn();
 		
-		var menuClick = true;
+		M.menuClick = true;
 		M.menu.click(function(){
-			menuClick = !menuClick;
-			if(menuClick){
+			M.menuClick = !M.menuClick;
+			if(M.menuClick){
 				M.hide();
 			}else{
 				M.show();
@@ -142,7 +149,7 @@ var Tool = {
 		});
 		M.mask.click(function(){
 			M.hide();
-			menuClick = true;
+			M.menuClick = true;
 		});
 		Tool.init();
 		M.update();
@@ -181,6 +188,7 @@ var Tool = {
 				,'<p>显示栏目</p>'
 				,'<p>显示买卖5档</p>'
 				,'<p>我要分享</p>'
+				,'<p>搜索</p>'
 			,'</div>'].join(''))
 			,status
 			,name;
@@ -189,7 +197,8 @@ var Tool = {
 			title : M.navList.eq(0)
 			,nav : M.navList.eq(1)
 			,maimai : M.navList.eq(2)
-			,share : M.navList.eq(2)
+			,share : M.navList.eq(3)
+			,search : M.navList.eq(4)
 		}
 		M.column.list.append(nav);
 		M.navList.each(function( i ){
@@ -212,12 +221,18 @@ var Tool = {
 						
 						break;
 					}
+					case 4 :{ //搜索
+						Dome.goTab(0);
+						M.menuClick = true;
+						M.hide();
+					}
 				};
 				if(i==0 || i==1 ){
 					status = Tool['get'+name]();
 					status = !status;
 					Tool['set'+name](status);
 				}
+				M.update();
 			});
 		});
 		
@@ -237,19 +252,20 @@ var Tool = {
 		},50);
 	}
 	,showNav : function(){
-		console.log('showNav')
-		
+		M.dome.nav.elem.appendTo(M.dome.content.elem);
+		Dome.resize();
 	}
 	,hideNav : function(){
-		console.log('hideNav')
+		M.dome.nav.elem.remove();
+		Dome.resize();
 	}
 	,showTitle : function(){
 		M.dome.title.elem.prependTo(M.dome.content.elem);
-		Main.resize();
+		Dome.resize();
 	}
 	,hideTitle : function(){
 		M.dome.title.elem.remove();
-		Main.resize();
+		Dome.resize();
 	}
 	,select : {//自选
 		
