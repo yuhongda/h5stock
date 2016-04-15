@@ -18,7 +18,7 @@ time,menu,nav{ display:block;}
  
 .stock-mymenu-nav{ width:0; height:0; font:0/0 arial; }
 .trans-dome{ float:left; width:1299px; height:100%; transition-duration:.5s; -webkit-transition-duration:.5s;  perspective:600px; -webkit-perspective:600px;}
-.stock-tabs{ float:left; width:375px; height:100%; margin-right:50px; position:relative; z-index:9; background:#fff; display:box; display:-webkit-box; box-orient:vertical; -webkit-box-orient:vertical; transition-duration:.5s; -webkit-transition-duration:.5s;}
+.stock-tabs{ float:left; width:375px; height:100%; margin-right:50px; position:relative; z-index:9; background:#fff; display:box; display:-webkit-box; box-orient:vertical; -webkit-box-orient:vertical; transition-duration:.5s; -webkit-transition-duration:.5s; overflow:hidden;}
  
 .stock-content{ position:relative; z-index:9; width:100%; height:100%; overflow:hidden; transition-duration:.5s; -webkit-transition-duration:.5s; perspective:600px; -webkit-perspective:600px; background:#ececec;}
 .stock-content .options{ width:1299px; position:relative; z-index:1; display:box; display:-webkit-box; box-flex:1; -webkit-box-flex:1; transition-duration:.5s; -webkit-transition-duration:.5s; background:#ececec; perspective:600px; -webkit-perspective:600px; }
