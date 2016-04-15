@@ -1,5 +1,5 @@
-(function(win,$){
-	var doc = document;
+(function( win , $ ){
+	var win = window , doc = document;
 	requestAnimationFrame = win.requestAnimationFrame ||
 							win.mozRequestAnimationFrame ||
 							win.webkitRequestAnimationFrame || 
@@ -8,7 +8,7 @@
 							win.setImmediate ||
 							win.msSetIntermediate || 
 							function(callback){setTimeout(callback,1000/60)};
-	win.T = {
+	var T = {
 		init : function(){
 			T.stopPreventDefault();
 			T.addCanvas();
@@ -199,4 +199,5 @@
 		}
 	};
 	T.init();
+	window.T = T;
 })(window,$);

@@ -215,10 +215,10 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 							C.resize();
 						})
 					}catch(e){
-						T.js('data.js',function(){
+						require(['./data'],function(){
 							C.format_date( Data );
 							C.resize();
-						})
+						});
 					}
 				}
 			},300);

@@ -27,13 +27,12 @@
 </div>
 </body>
 </html>
-<script src='zepto.js'></script>
-<script src='global.js'></script>
-<script src='dome.js'></script>
-<script src='main.js'></script>
-<script src='menu.js'></script>
+<script src='js/require.js'></script>
+<script src='js/config.js'></script>
 <script>
-Dome.create({
-	 dome : $('.dome')
-})
+require(['Dome'],function( Dome ){
+	Dome.create({
+		dome : $('.dome')
+	})
+});
 </script>

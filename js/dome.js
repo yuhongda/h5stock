@@ -1,6 +1,6 @@
-(function( win , $ ){
-	var body = $('body');
-	var D = {
+(function( win , $ , T ){
+	var body = $('body')
+	,D = {
 		 element : null
 		,init : function( ){
 			D.confix = {
@@ -27,7 +27,7 @@
 					D.element.title.elem.hide()
 				}
 				D.dome.append(D.element.elem);
-				
+				D.update();
 				Main.init();
 				Menu.init();
 				
@@ -191,6 +191,7 @@
 									,"<canvas class='bg ps'></canvas>"
 								,'</div>'
 							,'</div>'
+							,'<div class="add-stock">+自选</div>'
 						,'</div>'
 					,'</div>'
 				,"</article>"].join(''))
@@ -434,7 +435,7 @@
 				,gap = parseInt(tab.eq(0).css('margin-right'))
 				,len = tab.length;
 			
-			trans.width(width*len+gap*len);
+			trans.width(width*len+gap*len+999);
 			tab.width(width);
 			//D.goTab(D.tabCurrent);
 		}
@@ -456,7 +457,10 @@
 					,left1 = ((index-i)*56)
 				$(this).css3({transform:'translate3d(0px,0px, '+left+'px) rotateY('+left1+'deg)'})
 			});
-			D.updateOption();
+			if(index!=1) return;
+			setTimeout(function(){
+				D.updateOption();
+			},550)
 		}
 		,updateOption : function(){//更新 栏目 走势 公司新闻 公司资料 自选
 			var  width = D.width
@@ -471,7 +475,7 @@
 				,gap = parseInt(item.eq(0).css('margin-right'))
 				,parentHeight = parent.height();
 			
-			box.width(width*boxlen+boxgap*boxlen+99);
+			box.width(width*boxlen+boxgap*boxlen+999);
 			parent.width(width*len+gap*len);
 			item.css3({width:width+'px',height:parentHeight+'px'});
 			if(window.Main){
@@ -626,4 +630,4 @@
 		}
 	};
 	win.Dome = D;
-})( window , $ );
+})(window,$,T);

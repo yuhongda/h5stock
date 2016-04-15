@@ -133,7 +133,7 @@ var Tool = {
 		M.column = Dome.element.column
 		M.content = Dome.element.stockCnt.elem;
 		M.mask = Dome.element.mask.elem;
-		
+		M.updateSize();
 		
 		Mymenu.init(M.menu);
 		M.addcolumn();
@@ -154,9 +154,12 @@ var Tool = {
 		Tool.init();
 		M.update();
 	}
-	,resize : function(){
+	,updateSize : function(){
 		M.width = Dome.width;
 		M.height = Dome.height;
+	}
+	,resize : function(){
+		M.updateSize();
 		Mymenu.resize();
 	}
 	,getTitleStatus : function(){
