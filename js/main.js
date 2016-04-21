@@ -782,51 +782,6 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 			var index = 0 ;
 			try{C.move_draw_kline( obj , box , index );}catch(e){}
 		}
-	},
-	G = {
-		 init : function(){
-			G.li = $.get('a .li',M.news)
-			$.each($.get('a i',M.news),function(){
-				this.style.display = 'none'
-			})
-			G.news_more = $.get('a.more',M.news)
-			var arr = [] , li
-			$.each($.get('section.f10 ul'),function(){
-				li = $.get('li',this)
-				if(li && li[1]){arr.push(li[1])}
-			})
-			G.f10 = arr;
-			G.f10_more = $.get('section.f10 ul .more')
-		 }
-		,atr : function( ele , src , name){
-			//var obj = '{"p":"'+name+'"}'
-			ele.setAttribute('href',src);
-			//ele.setAttribute('data-md',obj);
-		}
-		,get_news : function( n ){
-			G.news = C.D.display.news;
-			//<!--需要打点的元素，添加data-md属性，用p标识区分不同的位置。值为json格式-->
-			//<a href="#" data-md='{"p":"link"}'>链接或者button</a>
-			var link , obj , more;
-			$.each(G.news , function( i ){
-				link = G.li[i].parentNode;
-				if(i<6){
-					G.li[i].innerHTML = '<p>'+this[1]+'</p>'+'<span>'+this[0]+'</span>';
-					G.atr(link , this[2],'detail');
-					G.li[i].nextElementSibling.style.display = 'block'
-				}
-			});
-			G.atr(G.news_more , C.D.display.newsmoreurl , 'detail');
-		}
-		,get_f10 : function(){
-			var dis = C.D.display , arr = dis.informContent , url = dis.informMoreUrl;
-			$.each(arr , function( i ){
-				if(i<5){
-					G.f10[i].innerHTML = this
-				}
-			});
-			G.atr(G.f10_more , dis.informMoreUrl , 'detail');
-		}
 	}
 	M = {
 		 tab : 'kline' //,'news','f10'
@@ -837,8 +792,8 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 		//,f10 : $.get('article.content .f10')
 		,init : function(){
 			C.init(); //画图工具
-			//G.init(); //新闻工具
-			//M.getName();
+			M.selector = Dome.element.selector.add;
+			M.select.init();
 		}
 		,search : function( name , type  ){ //用于搜索
 			C.keyword = name || '000001'
@@ -857,13 +812,112 @@ type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 			box.css3({transform:'translate3d('+left+'px,0,0)'});
 			C.search();
 		}
-		,nav_tab : function( n ){
-			var _fn = ['kline','news','f10']
-			for(var i=0; i<3; i++){
-				$.css(M[_fn[i]],{display:'none'})
+		,updateNav : function( n ){ //更新栏目 新闻 公司资料 自选
+			switch(n){
+				case 0 : //走势图
+					
+					break; 
+				case 1 : // 新闻
+					break; 
+				case 2 : // 公司资料
+					break;
+				case 3 : // 自选
+					M.select.update();
+					break;
 			}
-			M.tab = _fn[n];
-			$.css3(M[M.tab],{display:'box'},true)
+		}
+		,select : { //自选
+			init : function(){
+				M.selector.click(function( e ){
+					e.stopPropagation();
+					var self = $(this);
+					self.css3({opacity:0,transform:'translate(100px,100px)'});
+					setTimeout(function(){
+						self.hide();
+						M.select.add();
+					},350);
+				});
+				M.select.get();
+			}
+			,set : function( arr ){
+				T.set_stor( 'stockSelect'  , JSON.stringify(arr) );
+			}
+			,get : function(){
+				return JSON.parse(T.get_stor('stockSelect'));
+			}
+			,del : function(){
+				
+			}
+			,add :function(){
+				var  Data = C.D
+					,type = C.type
+					,dis = Data.display
+					,name = dis.stockname
+					,code = dis.stocknum
+					,arr = M.select.get() || [];
+				
+				arr.push({
+					 name : name
+					,code : code
+					,type : type
+					,pl : dis.fluctuation //涨幅
+					,vl : dis.lowPrice //总手
+				});
+				M.select.set(arr);
+				//,transactionPrice : 12.55 //交易价格
+				//,highPrice : 12.69  //最高
+				//,lowPrice : 12.45  //最低
+				//,Volume : 430343   //总手
+				//,Economy : '0.77%'  // 收益率
+				//,range : '-1.34%' //涨跌幅
+				//,fluctuation : '-0.17' //涨跌 差价
+				//,averagePrice : 12.57 //平均
+			}
+			,update : function(){ //每点击一次，便更新
+				var  list = Dome.element.selector.list
+					,sel = M.select.get()
+					,codes = '' , str = '';
+				$.each(sel,function( i , obj ){
+					codes += obj.code + ','
+				})
+				
+				$.ajax({
+					 url : 'http://q.jrjimg.cn/?q=cn|'+C.type+'&n=objInt&c=code,name,np,hp,lp,hlp,pl,tm&i='+codes
+					,dataType : 'jsonp'
+					,complete : function( ){
+						var obj = objInt;
+						$.each(obj.HqData,function(i,ele){
+							var  code = ele[obj.Column.code]
+								,name = ele[obj.Column.name]
+								,hp = ele[obj.Column.hp] //最高
+								,lp = ele[obj.Column.lp] //最低
+								,np = ele[obj.Column.np] //最新
+								,tm = ele[obj.Column.tm] //总手
+								,hlp = ele[obj.Column.hlp] //涨跌
+								,pl = ele[obj.Column.pl]; //涨幅
+							
+							pl	= pl==0?pl+'%':pl>0?'<span class="red">'+pl+'%</span>':'<span class="green">'+pl+'%</span>'
+							//hlp	= hlp==0?hlp:hlp>0?'<span class="red">'+hlp+'</span>':'<span class="green">'+hlp+'</span>'
+							tm = (tm/1000).toFixed(2)+'万手'
+							
+							str += '<ul><li>'+name+'</li>' //名称
+								+'<li>'+np+'</li>' 
+								+'<li>'+pl+'</li>'
+								//+'<li>'+hlp+'</li>'
+								+'<li>'+tm+'</li>'
+								+'<li><span class="add" data-index='+i+'>-</span></li></ul>';
+
+						});
+						list.html(str);
+						list.find('.add').unbind().bind('click',function(){
+							var index = $(this).attr('data-index')
+								,data = obj.HqData[index]
+							alert(data[0])
+						})
+					}
+				})
+				
+			}
 		}
 		,getName : function(){
 			var  type = M.getPara('type')

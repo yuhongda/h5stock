@@ -70,8 +70,6 @@
 					,'<article class="stock-content">' //所有的内容
 						,'<div class="trans-dome">'
 							,'<section class="stock-tabs">' //搜索
-								,'<div class="search">搜索列表'
-								,'</div>'
 							,'</section>'
 							,'<section class="stock-tabs">' //股票
 								,'<h2 class="stock-h2">'
@@ -106,7 +104,7 @@
 				,title = content.find('.stock-h2')
 				,options = content.find(".options")
 				,nav = content.find(".stock-nav")
-				,_option = $(['<div class="option">'
+				,_option = $(['<div class="option">' //行情图
 					,"<section class='stock-data'>"
 						,"<ul>"
 							,"<li><h3></h3><p></p></li>"
@@ -129,7 +127,7 @@
 				,stockNav = _option.find('.stock-menu')
 				,ptime = _option.find('.kline')
 				,ma = ptime.find('.stock-ma')
-				,pic = $(["<article class='stock-pic'>"
+				,pic = $(["<article class='stock-pic'>" //分时 K线 等图
 					,"<div class='canvassize'>"
 						,"<div class='canvasbox'>"
 							,'<div class="minute-canvas">'
@@ -191,9 +189,9 @@
 									,"<canvas class='bg ps'></canvas>"
 								,'</div>'
 							,'</div>'
-							,'<div class="add-stock">+自选</div>'
 						,'</div>'
 					,'</div>'
+					,'<div class="add-stock">+自选</div>'
 				,"</article>"].join(''))
 				,time = $(["<time class='stock-time'>"
 						,"<ul>"
@@ -227,7 +225,7 @@
 							,"<li class='green'></li>"
 						,"</ul>"
 					,"</div>"].join(''))
-				,news = $(["<div class='option'><section class='stock-news'>"
+				,news = $(["<div class='option'><section class='stock-news'>" //新闻
 						,"<a>"
 							,"<div class='li'>"
 								,"<p></p>"
@@ -237,7 +235,7 @@
 						,"</a>"
 						,"<a class='more'>查看更多新闻<i></i></a>"
 					,"</section></div>"].join(''))
-				,F10 = $(["<div class='option'><section class='stock-f10'>"
+				,F10 = $(["<div class='option'><section class='stock-f10'>" //公司资料
 						,"<ul>"
 							,"<li>公司名称</li>"
 							,"<li></li>"
@@ -263,9 +261,10 @@
 						,"</ul>"
 					,"</section>"
 				,"</div>"].join(''))
-				,selector = $(["<div class='option'>"
-					,"<section class='select'>"
-					,"<ul><li></li></ul>"
+				,selector = $(["<div class='option'>" //自选
+					,"<section class='stock-select'>"
+					,"<ul class='tit'><li>名称</li><li>最新</li><li>涨幅</li><li>总手</li><li></li></ul>"
+					,"<ul class='cnt'></ul>"
 					,"</section>"
 				,"</div>"].join(''))
 				
@@ -385,6 +384,10 @@
 						 }
 					}
 				}
+				,selector : {
+					  add : pic.find('.add-stock')
+					 ,list : selector.find('.cnt')
+				}
 				,nav : { //栏目
 					 elem : nav
 					,li : nav.find('li')
@@ -476,7 +479,7 @@
 				,parentHeight = parent.height();
 			
 			box.width(width*boxlen+boxgap*boxlen+999);
-			parent.width(width*len+gap*len);
+			parent.width(width*len+gap*len+999);
 			item.css3({width:width+'px',height:parentHeight+'px'});
 			if(window.Main){
 				setTimeout(Main.resize,350);
@@ -530,7 +533,8 @@
 					,left1 = ((index-i)*56)
 				$(this).css3({transform:'translate3d(0px,0px, '+left+'px) rotateY('+left1+'deg)'})
 			});
-
+			
+			Main.updateNav( index );
 			
 		}
 		,elementEvent : function(){
@@ -576,7 +580,7 @@
 				,top = ele.top.elem
 				,left = -ele.canvasBox.elem.width()*index;
 				
-			ma.css({width:D.width-20+'px'})
+			//ma.css({width:D.width-20+'px'})
 			if(!D.currentCanvasTab){
 				Main.clearCanvas( index );
 				line.css3({opacity:0,transform:'translateY(-100px)'});
@@ -616,7 +620,8 @@
 					,time = ele.time.elem
 					,line = ele.line.elem
 					,stockNav = ele.stockNav.elem
-					,top = ele.top.elem;
+					,top = ele.top.elem
+					,selector = ele.selector.add;
 				setTimeout(function(){
 					stockNav.css3({opacity:1,transform:'translateY(0)'});
 					box.css3({transform:'translateX(0)'});
@@ -624,6 +629,7 @@
 						top.css3({opacity:1,transform:'scaleY(1) rotateX(0deg)'});
 						line.css3({opacity:1,transform:'translateY(0)'});
 						time.css3({opacity:1,transform:'translateY(0)'});
+						selector.css3({opacity:1})
 					},510);
 				},300);
 			},300);

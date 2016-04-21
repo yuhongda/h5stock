@@ -27,11 +27,11 @@
 </div>
 </body>
 </html>
-<script src='js/require.js'></script>
-<script src='js/config.js'></script>
+<script src='js/lib/require.js'></script>
+<script src='js/main/config.js'></script>
 <script>
-require(['Dome'],function( Dome ){
-	Dome.create({
+require(['controller/dome'],function( dome ){
+	dome.init({
 		dome : $('.dome')
 	})
 });

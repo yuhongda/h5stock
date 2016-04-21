@@ -4,7 +4,7 @@ a{ border:none; text-decoration:none; color:#333}
 li,ul li{list-style:none; }
 img{ font:0/0 STHeiti; }
 html,body{ width:100%; height:100%; color:#666;}
-i{ display:inline-block; vertical-align:middle; background:url(bg.png); background-size:51px 48px; -webkit-background-size: 51px 48px;}
+i{ display:inline-block; vertical-align:middle;}
 .red{ color:#cc0000;}
 .green{ color:#379102;}
 .blue{ color:#005dd8;}
@@ -50,7 +50,7 @@ h2.stock-h2 .name a{ color:#005dd8}
 .stock-menu li.current{ color:#f24638; }
 .stock-menu li:focus{ outline:0;}
 .stock-ma,.kline .stock-time{ -webkit-transition-duration:.5s; opacity:0; height:20px; line-height:20px; font-size:.75rem;}
-.stock-ma{ position:absolute; left:10px; top:10px; right:10px; z-index:9; -webkit-transform:translateY(50px);}
+.stock-ma{ position:absolute; width:auto; left:10px; top:10px; right:10px; z-index:9; -webkit-transform:translateY(50px);}
 .stock-ma li,.kline .stock-time li{ -webkit-box-flex:1; font-size:.75rem; font-weight:normal;}
 .stock-ma li:nth-child(1){ color:#fea100; text-align:left;}
 .stock-ma li:nth-child(2){ color:#9050cb; text-align:center;}
@@ -60,7 +60,7 @@ h2.stock-h2 .name a{ color:#005dd8}
 .kline .stock-time li:nth-child(3){text-align:right;}
 
 .stock-pic{ position:relative; z-index:1; -webkit-box-flex:1; background:white;}
-.stock-pic .add-stock{ position:absolute; z-index:9; left:10px; top:10px; display:inline-block; padding:2px 9px; background:rgba(0,0,0,.2); font-size:.75rem; color:#fff; border-radius:5px;}
+.stock-pic .add-stock{ position:absolute; z-index:10; left:10px; top:10px; display:inline-block; padding:2px 9px; background:rgba(255,0,0,.3); font-size:.75rem; color:#fff; border-radius:3px; opacity:0; transition-duration:.3s; -webkit-transition-duration:.3s;}
 .stock-line{ position:absolute; left:0; top:0; z-index:9; width:100%; height:100%; -webkit-transition-duration:.5s; opacity:0; -webkit-transform:translateY(-100px)}
 .stock-line .hline .line{ position:absolute; left:0; top:95px; width:100%; height:1px; font:0/0 arial; background:#5181cb;}
 .stock-line .vline .line{position:absolute; left:100px; top:0; width:1px; height:100%; font:0/0 arial; background:#5181cb;}
@@ -107,3 +107,22 @@ h2.stock-h2 .name a{ color:#005dd8}
 .stock-nav .currentLine{ width:25%; left:0; top:auto; right:auto; bottom:0;}
 .stock-nav li:last-child{ border-right:none;}
 .stock-nav li.current{ border-top:none; background:white;}
+
+.stock-select .tit{ display:box; display:-webkit-box; height:35px; line-height:35px; border-bottom:1px solid #eee; background:#f8f8f8;font-size:.75rem; }
+.stock-select .cnt{ padding:10px 0; }
+.stock-select .cnt ul{ display:box; display:-webkit-box; padding:5px 0; line-height:22px; font-size:.75rem;}
+.stock-select .cnt ul:nth-child(even){ background:#f8f8f8;}
+.stock-select li{ width:20%; box-flex:1; -webkit-box-flex:1; text-align:center;}
+.stock-select .add{ display:inline-block; width:20px; height:15px; line-height:15px; border-radius:3px; text-align:center; background:rgba(0,0,0,.1); color:#666;}
+
+.stock-search{}
+.stock-search .tit{ height:30px; padding:5px; display:box; display:-webkit-box; border-bottom:1px solid #ddd;}
+.stock-search .back{ width:50px; height:25px; line-height:25px; margin-top:2px; margin-left:3px; text-align:center; background:#e8e8e8; font-size:.75rem; color:#999; }
+.stock-search .input{ box-flex:1; -webkit-box-flex:1; height:30px; line-height:30px; padding:0 15px;}
+.stock-search .input.gray{ color:#999; font-size:.75rem;}
+.stock-search .close{ position:relative; z-index:1; width:20px; height:20px; margin:5px 5px 0 0 ;}
+.stock-search .close .v-line,.stock-search .close .h-line{ position:absolute; left:0; top:50%; width:100%; height:2px; margin-top:-1px; transform:rotate(45deg); -webkit-transform:rotate(45deg); background:#ccc; }
+.stock-search .close .h-line{transform:rotate(-45deg); -webkit-transform:rotate(-45deg);}
+
+.stock-search .keyboard{ background:#c9c9c9; }
+
