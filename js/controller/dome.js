@@ -1,13 +1,23 @@
 define([
-		'zepto'
-		,'pub'
-		,'text!views/index.html'
-		,'./search'
-		,'./stock'
-	],function( $, T , dome , search , stock ){
+	'zepto'
+	,'pub'
+	,'text!views/index.html'
+	,'./search'
+	,'./stock'
+	,'./myMenu'
+]
+,function(
+	 $
+	,T 
+	,dome 
+	,search 
+	,stock 
+	,myMenu
+){
 	var D = {
 		init : function( obj ){
-			D.create( obj );
+			
+			D.create(obj)
 			D.update();
 		}
 		,create : function( obj ){
@@ -27,6 +37,9 @@ define([
 			D.trans = D.wapper.find('.trans-dome');
 			D.tab = D.wapper.find('.stock-tabs'); //[0,1,2] 
 			
+			stock.init( D.tab.eq(1) );
+			myMenu.init( D ); 
+			
 			D.tab.each(function( i , ele ){
 				var  left = -i*110
 					,left1 = -i*56
@@ -45,7 +58,7 @@ define([
 		}
 		,resize : function(){
 			D.update();
-			D.goTab(D.tabCurrent);
+			D.goTab(1);
 		}
 		,updateTab : function(){ //更新最外层 tab //搜索 股票，其他 的宽度
 			var  width = D.width
@@ -57,9 +70,8 @@ define([
 			trans.width(width*len+gap*len+999);
 			tab.width(width);
 		}
-		,tabCurrent : 1
+		,tabCurrent : 0
 		,goTab : function( index ){ //要去的tab 0,1,2  //搜索 股票，其他
-			D.tabCurrent = index;
 			D.updateTab();
 			var  width = D.width
 				,height = D.height
@@ -76,7 +88,16 @@ define([
 					,left1 = ((index-i)*56)
 				$(this).css3({transform:'translate3d(0px,0px, '+left+'px) rotateY('+left1+'deg)'})
 			});
+			if(index!=1) return;
+			if(D.tabCurrent == index){
+				stock.resize( D );
+			}else{ // tab 3D切换时，宽度会发生变化。必需要切换完成 才可以获取尺寸
+				setTimeout(function(){
+					stock.resize( D );
+				},550)
+				D.tabCurrent = index;
+			}
 		}
-	}
-	return D
+	};
+	return D;
 });

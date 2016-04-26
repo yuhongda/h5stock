@@ -1,0 +1,246 @@
+define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
+	/**
+		1、自选显示或隐藏
+		2、买卖
+		3、新闻显示或隐藏
+		4、公司资料显示或隐藏
+		5、买卖5档
+		6、资金
+		7、F10
+		8、搜索
+		9、载图分享
+		10、分享
+	**/
+	var Tool = {
+		init : function(){
+			 
+		}
+		,getTitle : function(){
+			return JSON.parse(T.get_stor('MyMenuTitle'));
+		}
+		,setTitle : function( bool ){
+			T.set_stor( 'MyMenuTitle'  , bool );
+			M.resize();
+		}
+		,getNav : function(){
+			return JSON.parse(T.get_stor('MyMenuNav'));
+		}
+		,setNav : function( bool ){
+			T.set_stor( 'MyMenuNav'  , bool );
+			M.resize();
+		}
+	}
+	,G = {
+		init : function( D ){
+			G.parentElement = D.wapper;
+			G.Dome = $(HTML);
+			D.wapper.append(G.Dome);
+			
+			G.setElement();
+			//M.init();
+		}
+		,resize : function(){
+			M.resize();
+		}
+		,setElement : function(){
+			
+		}
+	}
+	,Mymenu = {
+		init : function( elem ){
+			Mymenu.elem = elem;
+			var obj = Mymenu.getPosition();
+			Mymenu.elem.css({left:obj.left+'px',top:obj.top+'px'});
+			Mymenu.addEvent();
+			//T.dele_stor('MyMenuPosition');
+		}
+		,addEvent : function( ){
+			var  list = Mymenu.elem
+				,self = Mymenu;
+			T.myAddListener(list,'mousedown', self.downEvent);
+			T.myAddListener(list,'mousemove',self.moveEvent);
+			T.myAddListener(list,'mouseup',self.upEvent);
+		}
+		,resize : function(){
+			var obj = Mymenu.getPosition()
+				,width = Dome.width-Mymenu.elem.width()-2
+				,height = Dome.height-Mymenu.elem.height()-2;
+			if(obj.left>width){
+				obj.left = width
+			}
+			if(obj.top>height){
+				obj.top = height;
+			}
+			Mymenu.elem.css({left:obj.left+'px',top:obj.top+'px'});
+		}
+		,getPosition : function(){ //获取图标位置
+			var size = T.get_stor('MyMenuPosition');
+			if( void 0 != size){
+				return JSON.parse(size);
+			}else{
+				Mymenu.setPosition({left:M.width-50,top:M.height-50});
+				return arguments.callee(arguments);
+			}
+		}
+		,setPosition : function( val ){ //设置图标位置
+			T.set_stor( 'MyMenuPosition'  , JSON.stringify(val) )
+		}
+	} 
+	,M = {
+		init : function(){
+			M.dome = G.parentElement
+			M.menu = Dome.element.menu.elem
+			M.column = Dome.element.column
+			M.content = Dome.element.stockCnt.elem;
+			M.mask = Dome.element.mask.elem;
+			M.updateSize();
+			
+			Mymenu.init(M.menu);
+			M.addcolumn();
+			
+			M.menuClick = true;
+			M.menu.click(function(){
+				M.menuClick = !M.menuClick;
+				if(M.menuClick){
+					M.hide();
+				}else{
+					M.show();
+				}
+			});
+			M.mask.click(function(){
+				M.hide();
+				M.menuClick = true;
+			});
+			Tool.init();
+			M.update();
+		}
+		,updateSize : function(){
+			M.width = Dome.width;
+			M.height = Dome.height;
+		}
+		,resize : function(){
+			M.updateSize();
+			Mymenu.resize();
+		}
+		,getTitleStatus : function(){
+			return Tool.getTitle();
+		}
+		,setTitleStatus : function( val ){
+			Tool.setTitle(val);
+		}
+		,update : function(){ //更新栏目状态
+			var  title = Tool.getTitle()
+				,nav = Tool.getNav();
+			M.navList.removeClass('cur');
+			if( title == true ){
+				M.navs.title.addClass('cur');
+				M.showTitle();
+			}else{
+				M.hideTitle();
+			}
+			if( nav == true ){
+				M.navs.nav.addClass('cur');
+				M.showNav();
+			}else{
+				M.hideNav();
+			}
+		}
+		,navList : null
+		,addcolumn : function(){
+			var nav = $(['<div><p>显示标题</p>'
+					,'<p>显示栏目</p>'
+					,'<p>显示买卖5档</p>'
+					,'<p>我要分享</p>'
+					,'<p>搜索</p>'
+				,'</div>'].join(''))
+				,status
+				,name;
+			M.navList = nav.find('p');
+			M.navs = {
+				title : M.navList.eq(0)
+				,nav : M.navList.eq(1)
+				,maimai : M.navList.eq(2)
+				,share : M.navList.eq(3)
+				,search : M.navList.eq(4)
+			}
+			M.column.list.append(nav);
+			M.navList.each(function( i ){
+				$(this).click(function(){
+					M.navCurrent = i;
+					switch(i){
+						case 0 : { //显示标题
+							name = 'Title'
+							break;
+						}
+						case 1 : { //显示栏目
+							name = 'Nav'
+							break;
+						}
+						case 2 : { //显示买卖5档
+							
+							break;
+						}
+						case 3 : { //我要分享
+							
+							break;
+						}
+						case 4 :{ //搜索
+							Dome.goTab(0);
+							M.menuClick = true;
+							M.hide();
+						}
+					};
+					if(i==0 || i==1 ){
+						status = Tool['get'+name]();
+						status = !status;
+						Tool['set'+name](status);
+					}
+					M.update();
+				});
+			});
+			
+		}
+		,show : function(){//显示栏目信息
+			M.content.css3({transform:'translate3d(-40%,0,0)'});
+			M.mask.css3({zIndex:89})
+			setTimeout(function(){
+				M.mask.css3({opacity:1});
+			},50);
+		}
+		,hide : function(){
+			M.content.css3({transform:'translate3d(0,0,0)'});
+			M.mask.css3({opacity:0})
+			setTimeout(function(){
+				M.mask.css3({zIndex:1});
+			},50);
+		}
+		,showNav : function(){
+			M.dome.nav.elem.appendTo(M.dome.content.elem);
+			Dome.resize();
+		}
+		,hideNav : function(){
+			M.dome.nav.elem.remove();
+			Dome.resize();
+		}
+		,showTitle : function(){
+			M.dome.title.elem.prependTo(M.dome.content.elem);
+			Dome.resize();
+		}
+		,hideTitle : function(){
+			M.dome.title.elem.remove();
+			Dome.resize();
+		}
+		,select : {//自选
+			
+		}
+		,buy : { //买卖
+			show : function(){
+				
+			}
+			,hide : function(){
+				
+			}
+		}
+	}
+	return G;
+});
