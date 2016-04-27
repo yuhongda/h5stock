@@ -32,8 +32,15 @@ define([],function(  ){
 			if(this.setCapture) this.setCapture();
 			this.firstX = e.clientX;
 			this.firstY = e.clientY;
-			this.left = e.clientX - self.parentElement.offset().left - self.elem.width()/2;
-			this.top = e.clientY - self.parentElement.offset().top - self.elem.height()/2;
+			
+			var  ml = self.parentElement.offset().left
+				,my = self.parentElement.offset().top
+				,x = this.firstX-self.elem.offset().left - ml
+				,y = this.firstY-self.elem.offset().top - my ;
+			
+			this.left = (e.clientX - ml) - x;
+			this.top = (e.clientY - my) - y;
+			
 			this.moveX = 0;
 			this.moveY = 0;
 			this._move = true;
@@ -45,12 +52,12 @@ define([],function(  ){
 			var  list = self.elem
 				,xPoint = e.clientX
 				,yPoint = e.clientY
-				,x , y
+				//,x , y
 				,r = 32
 				,w = M.width - r
 				,h = M.height - r;
-			x = Math.abs( xPoint - this.firstX );
-			y = Math.abs( yPoint - this.firstY );
+			//x = Math.abs( xPoint - this.firstX );
+			//y = Math.abs( yPoint - this.firstY );
 			
 			this._ismove = true;
 			
