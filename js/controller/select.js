@@ -1,9 +1,9 @@
 define(['text!views/select.html'],function( HTML ){
 	var S = {
-		init : function( dome ){
-			S.parentElement = dome;
+		init : function( nav ){
+			S.parentElement = nav.options;
 			S.Dome = $(HTML);
-			dome.append(S.Dome);
+			S.parentElement.append(S.Dome);
 		}
 		,resize : {
 			

@@ -133,10 +133,10 @@ define(['text!views/draw-stock.html'],function( HTML ){
 		}
 	},
 	G = { // 模块，公共事件 , tab切换等
-		init : function( dome ){
-			G.parentElement = dome;
+		init : function( nav ){
+			G.parentElement = nav.options;
 			G.Dome = $(HTML);
-			dome.append(G.Dome);
+			G.parentElement.append(G.Dome);
 			G.setElement();
 			C.init(); //画图工具
 			G.tabEvent();

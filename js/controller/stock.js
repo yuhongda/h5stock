@@ -1,47 +1,41 @@
 define([
 	'text!views/stock.html'
-	,'./price'
-	,'./news'
-	, './f10'
-	, './select'
+	,'./stockTitle'
+	,'./stocknav'
+	
 ]
 ,function( 
 	 options 
-	,price 
-	,news 
-	,f10 
-	,selector 
+	,title
+	,nav
 ){
 	var stock = {
 		
-		init : function( dome ){
-			stock.parentElement = dome;
-			options = $(options);
-			dome.append(options);
+		init : function( D ){
+			stock.parentElement = D.stockContent;
+			stock.options = $(options); //分时，新闻，F10，自选 的父类
+			D.stockContent.append(stock.options);
 			
+			title.init(D);
+			nav.init(D , stock);
 			
-			price.init(options);
-			news.init(options);
-			f10.init(options);
-			selector.init(options);
-			
-			//分时，新闻，F10，自选
-			stock.item = $(price.Dome).add(news.Dome).add(f10.Dome).add(selector.Dome);
-			
+			stock.item = nav.item;
 		}
 		,resize : function( D ){
 			stock.width = D.width;
 			stock.height = D.height;
 			stock.updateOption();
-			price.resize( D );
+			
+			title.resize( D );
+			nav.resize( D );
 		}
 		,updateOption : function(){//更新 options 尺寸
 			var  width = stock.width
-				,parent = stock.parentElement
 				,item = stock.item
-				,parentHeight = parent.height();
+				,len = item.length
+				,gap = parseInt(item.eq(0).css('margin-right'));
 			
-			item.css3({width:width+'px',height:parentHeight+'px'});
+			stock.options.width(width*len+gap*len+999);
 		}
 		,getCode : function(){ //获取股票代码
 			

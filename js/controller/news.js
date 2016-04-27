@@ -1,9 +1,9 @@
 define(['text!views/news.html'],function( HTML ){
 	var N = {
-		init : function( dome ){
-			N.parentElement = dome;
+		init : function( nav ){
+			N.parentElement = nav.options;
 			N.Dome = $(HTML);
-			dome.append(N.Dome);
+			N.parentElement.append(N.Dome);
 		}
 		,resize : {
 			

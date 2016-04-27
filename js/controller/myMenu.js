@@ -1,4 +1,8 @@
-define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
+define([
+	'text!views/nav.html'
+	,'./stock'
+	,'main/moveEvent'
+],function( HTML , stock , Move ){
 	/**
 		1、自选显示或隐藏
 		2、买卖
@@ -33,17 +37,27 @@ define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
 	,G = {
 		init : function( D ){
 			G.parentElement = D.wapper;
+			G.content = D.content
+			G.stockContent = D.stockContent
 			G.Dome = $(HTML);
 			D.wapper.append(G.Dome);
 			
 			G.setElement();
-			//M.init();
+			M.init();
 		}
 		,resize : function(){
 			M.resize();
 		}
 		,setElement : function(){
-			
+			var dome = G.Dome;
+			G.element = {
+				 title : $(title)
+				,nav : $(nav)
+				,column : dome.find('.stock-column')
+				,list : dome.find('.stock-list')
+				,menu : dome.find('.stock-myMenu')
+				,mask : dome.find('.stock-mask')
+			}
 		}
 	}
 	,Mymenu = {
@@ -63,8 +77,8 @@ define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
 		}
 		,resize : function(){
 			var obj = Mymenu.getPosition()
-				,width = Dome.width-Mymenu.elem.width()-2
-				,height = Dome.height-Mymenu.elem.height()-2;
+				,width = G.width-Mymenu.elem.width()-2
+				,height = G.height-Mymenu.elem.height()-2;
 			if(obj.left>width){
 				obj.left = width
 			}
@@ -88,18 +102,12 @@ define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
 	} 
 	,M = {
 		init : function(){
-			M.dome = G.parentElement
-			M.menu = Dome.element.menu.elem
-			M.column = Dome.element.column
-			M.content = Dome.element.stockCnt.elem;
-			M.mask = Dome.element.mask.elem;
-			M.updateSize();
-			
-			Mymenu.init(M.menu);
+
+			Mymenu.init(G.element.menu);
 			M.addcolumn();
 			
 			M.menuClick = true;
-			M.menu.click(function(){
+			G.element.menu.click(function(){
 				M.menuClick = !M.menuClick;
 				if(M.menuClick){
 					M.hide();
@@ -107,19 +115,14 @@ define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
 					M.show();
 				}
 			});
-			M.mask.click(function(){
+			G.element.mask.click(function(){
 				M.hide();
 				M.menuClick = true;
 			});
 			Tool.init();
 			M.update();
 		}
-		,updateSize : function(){
-			M.width = Dome.width;
-			M.height = Dome.height;
-		}
 		,resize : function(){
-			M.updateSize();
 			Mymenu.resize();
 		}
 		,getTitleStatus : function(){
@@ -163,7 +166,7 @@ define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
 				,share : M.navList.eq(3)
 				,search : M.navList.eq(4)
 			}
-			M.column.list.append(nav);
+			G.element.list.append(nav);
 			M.navList.each(function( i ){
 				$(this).click(function(){
 					M.navCurrent = i;
@@ -201,34 +204,34 @@ define(['text!views/nav.html','main/moveEvent'],function( HTML , Move ){
 			
 		}
 		,show : function(){//显示栏目信息
-			M.content.css3({transform:'translate3d(-40%,0,0)'});
-			M.mask.css3({zIndex:89})
+			G.content.css3({transform:'translate3d(-40%,0,0)'});
+			G.element.mask.css3({zIndex:89})
 			setTimeout(function(){
-				M.mask.css3({opacity:1});
+				G.element.mask.css3({opacity:1});
 			},50);
 		}
 		,hide : function(){
-			M.content.css3({transform:'translate3d(0,0,0)'});
-			M.mask.css3({opacity:0})
+			G.content.css3({transform:'translate3d(0,0,0)'});
+			G.element.mask.css3({opacity:0})
 			setTimeout(function(){
-				M.mask.css3({zIndex:1});
+				G.element.mask.css3({zIndex:1});
 			},50);
 		}
 		,showNav : function(){
-			M.dome.nav.elem.appendTo(M.dome.content.elem);
-			Dome.resize();
+			G.element.nav.appendTo(G.stockContent);
+			//Dome.resize();
 		}
 		,hideNav : function(){
-			M.dome.nav.elem.remove();
-			Dome.resize();
+			G.element.nav.remove();
+			//Dome.resize();
 		}
 		,showTitle : function(){
-			M.dome.title.elem.prependTo(M.dome.content.elem);
-			Dome.resize();
+			G.element.title.prependTo(G.stockContent);
+			//Dome.resize();
 		}
 		,hideTitle : function(){
-			M.dome.title.elem.remove();
-			Dome.resize();
+			G.element.title.remove();
+			//Dome.resize();
 		}
 		,select : {//自选
 			

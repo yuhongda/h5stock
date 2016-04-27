@@ -1,9 +1,9 @@
-define(['text!views/news.html'],function( HTML ){
+define(['text!views/f10.html'],function( HTML ){
 	var F = {
-		init : function( dome ){
-			F.parentElement = dome;
+		init : function( nav ){
+			F.parentElement = nav.options;
 			F.Dome = $(HTML);
-			dome.append(F.Dome);
+			F.parentElement.append(F.Dome);
 		}
 		,resize : {
 			

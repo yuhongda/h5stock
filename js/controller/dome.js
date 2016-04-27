@@ -32,13 +32,16 @@ define([
 			var ele = this.config.dome;
 			ele.append(dome);
 			
-			D.wapper = $('#Stock-Wapper');
-			D.content = D.wapper.find('.stock-content');
-			D.trans = D.wapper.find('.trans-dome');
-			D.tab = D.wapper.find('.stock-tabs'); //[0,1,2] 
+			D.wapper = $('#Stock-Wapper'); //最外层 div
+			D.content = D.wapper.find('.stock-content'); // 第二层div mask 时，移动所有内容
+			D.trans = D.wapper.find('.trans-dome'); //第三层div 用于translateX 搜索 股票 其他等移动
+			D.tab = D.wapper.find('.stock-tabs'); //[0,1,2]  trans的子集
+			D.searchContent = D.tab.eq(0); //搜索
+			D.stockContent = D.tab.eq(1); //股票
+			D.elseContent = D.tab.eq(2); //其他
 			
-			stock.init( D.tab.eq(1) );
-			myMenu.init( D ); 
+			stock.init( D );
+			//myMenu.init( D ); 
 			
 			D.tab.each(function( i , ele ){
 				var  left = -i*110
