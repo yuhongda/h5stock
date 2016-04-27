@@ -18,7 +18,7 @@ define([
 		init : function( obj ){
 			
 			D.create(obj)
-			D.update();
+			
 		}
 		,create : function( obj ){
 			D.config = {
@@ -40,8 +40,10 @@ define([
 			D.stockContent = D.tab.eq(1); //股票
 			D.elseContent = D.tab.eq(2); //其他
 			
+			D.update();
+			
 			stock.init( D );
-			//myMenu.init( D ); 
+			myMenu.init( D ); 
 			
 			D.tab.each(function( i , ele ){
 				var  left = -i*110
@@ -62,6 +64,9 @@ define([
 		,resize : function(){
 			D.update();
 			D.goTab(1);
+			
+			stock.resize( D );
+			myMenu.resize( D );
 		}
 		,updateTab : function(){ //更新最外层 tab //搜索 股票，其他 的宽度
 			var  width = D.width

@@ -5,7 +5,7 @@ define(['text!views/f10.html'],function( HTML ){
 			F.Dome = $(HTML);
 			F.parentElement.append(F.Dome);
 		}
-		,resize : {
+		,resize : function(){
 			
 		}
 	}

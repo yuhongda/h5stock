@@ -5,7 +5,7 @@ define(['text!views/select.html'],function( HTML ){
 			S.Dome = $(HTML);
 			S.parentElement.append(S.Dome);
 		}
-		,resize : {
+		,resize : function(){
 			
 		}
 	}

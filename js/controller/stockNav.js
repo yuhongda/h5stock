@@ -10,20 +10,22 @@ define([
 			nav.parentElement = D.stockContent;
 			nav.options = stock.options; // 分时，新闻，F10，自选 的父类
 			nav.Dome = $(navHTML);
-			nav.parentElement.append(nav.Dome);
 			
 			nav.setElement();
 			
 			
 			nav.navEvent();
-			nav.add();
 		}
 		,resize : function( D ){
 			nav.width = D.width;
 			nav.height = D.height;
 			
 			nav.updateItem();
+			
 			price.resize( D );
+			news.resize( D );
+			f10.resize( D );
+			selector.resize( D );
 		}
 		,setElement : function(){
 			price.init(nav);
@@ -45,10 +47,10 @@ define([
 			
 			item.css3({width:width+'px',height:parentHeight+'px'});
 		}
-		,add : function(){ //添加栏目
+		,show : function(){ //添加栏目
 			nav.Dome.appendTo(nav.parentElement);
 		}
-		,remove : function(){ //删除栏目
+		,hide : function(){ //删除栏目
 			nav.Dome.remove();
 		}
 		,navCurrent : 0

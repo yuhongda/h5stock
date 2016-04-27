@@ -1,8 +1,9 @@
 define([
 	'text!views/nav.html'
-	,'./stock'
+	,'./stockTitle'
+	,'./stocknav'
 	,'main/moveEvent'
-],function( HTML , stock , Move ){
+],function( HTML , title , nav , Move  ){
 	/**
 		1、自选显示或隐藏
 		2、买卖
@@ -42,10 +43,15 @@ define([
 			G.Dome = $(HTML);
 			D.wapper.append(G.Dome);
 			
+			G.width = D.width;
+			G.height = D.height;
+			
 			G.setElement();
 			M.init();
 		}
-		,resize : function(){
+		,resize : function( D ){
+			G.width = D.width;
+			G.height = D.height;
 			M.resize();
 		}
 		,setElement : function(){
@@ -69,11 +75,7 @@ define([
 			//T.dele_stor('MyMenuPosition');
 		}
 		,addEvent : function( ){
-			var  list = Mymenu.elem
-				,self = Mymenu;
-			T.myAddListener(list,'mousedown', self.downEvent);
-			T.myAddListener(list,'mousemove',self.moveEvent);
-			T.myAddListener(list,'mouseup',self.upEvent);
+			new Move(G.parentElement , Mymenu.elem , 'MyMenuPosition')
 		}
 		,resize : function(){
 			var obj = Mymenu.getPosition()
@@ -92,7 +94,7 @@ define([
 			if( void 0 != size){
 				return JSON.parse(size);
 			}else{
-				Mymenu.setPosition({left:M.width-50,top:M.height-50});
+				Mymenu.setPosition({left:G.width-50,top:G.height-50});
 				return arguments.callee(arguments);
 			}
 		}
@@ -119,7 +121,6 @@ define([
 				M.hide();
 				M.menuClick = true;
 			});
-			Tool.init();
 			M.update();
 		}
 		,resize : function(){
@@ -218,19 +219,19 @@ define([
 			},50);
 		}
 		,showNav : function(){
-			G.element.nav.appendTo(G.stockContent);
+			nav.show();
 			//Dome.resize();
 		}
 		,hideNav : function(){
-			G.element.nav.remove();
+			nav.hide();
 			//Dome.resize();
 		}
 		,showTitle : function(){
-			G.element.title.prependTo(G.stockContent);
+			title.show();
 			//Dome.resize();
 		}
 		,hideTitle : function(){
-			G.element.title.remove();
+			title.hide();
 			//Dome.resize();
 		}
 		,select : {//自选

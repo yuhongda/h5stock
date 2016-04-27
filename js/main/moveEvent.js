@@ -4,35 +4,45 @@ define([],function(  ){
 			T.set_stor( key  , JSON.stringify(val) )
 		}
 	} 
-	,Mymenu = function( elem , key ){
+	,Mymenu = function( parentElement , elem , key ){
 		
 		if(this instanceof Mymenu ){
+			this.parentElement = parentElement;
 			this.elem = elem;
 			this.key = key;
-			T.myAddListener(this.elem,'mousedown', this.downEvent);
-			T.myAddListener(this.elem,'mousemove',this.moveEvent);
-			T.myAddListener(this.elem,'mouseup',this.upEvent);
+			
+			var self = this;
+			
+			T.myAddListener(this.elem,'mousedown', function( e ){
+				self.downEvent.call( this , e , self );
+			});
+			T.myAddListener(this.elem,'mousemove',function( e ){
+				self.moveEvent.call( this , e , self );
+			});
+			T.myAddListener(this.elem,'mouseup',function( e ){
+				self.upEvent.call( this , e , self );
+			});
 		}else{
-			return new Mymenu( elem , key );
+			return new Mymenu( parentElement , elem , key );
 		}
 	};
 	Mymenu.prototype = {
-		downEvent : function(  e ){
+		downEvent : function(  e , self ){
 			e = T.getEvent(e,0,1);
 			if(this.setCapture) this.setCapture();
 			this.firstX = e.clientX;
 			this.firstY = e.clientY;
-			this.left = e.clientX - Dome.element.elem.offset().left - Mymenu.elem.width()/2;
-			this.top = e.clientY - Dome.element.elem.offset().top - Mymenu.elem.height()/2;
+			this.left = e.clientX - self.parentElement.offset().left - self.elem.width()/2;
+			this.top = e.clientY - self.parentElement.offset().top - self.elem.height()/2;
 			this.moveX = 0;
 			this.moveY = 0;
 			this._move = true;
 			this._ismove = false;
 		}
-		,moveEvent : function(  e ){
+		,moveEvent : function(  e , self ){
 			if(!this._move) return;
 			e = T.getEvent(e,0,1);
-			var  list = Mymenu.elem
+			var  list = self.elem
 				,xPoint = e.clientX
 				,yPoint = e.clientY
 				,x , y
@@ -64,12 +74,12 @@ define([],function(  ){
 			list.css({left:this.endX+'px',top:this.endY+'px'})
 			
 		}
-		,upEvent : function(  e ){
+		,upEvent : function(  e , self ){
 			this._move = false;
 			if(this.releaseCapture)this.releaseCapture();
 			if(this._ismove){
 				this._ismove = false;
-				Tool.setPosition(this.key , {left:this.endX,top:this.endY})
+				Tool.setPosition(self.key , {left:this.endX,top:this.endY})
 			}
 		}
 	}

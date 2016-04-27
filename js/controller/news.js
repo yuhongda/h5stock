@@ -5,7 +5,7 @@ define(['text!views/news.html'],function( HTML ){
 			N.Dome = $(HTML);
 			N.parentElement.append(N.Dome);
 		}
-		,resize : {
+		,resize : function(){
 			
 		}
 	}

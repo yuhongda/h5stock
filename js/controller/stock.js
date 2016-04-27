@@ -16,8 +16,14 @@ define([
 			stock.options = $(options); //分时，新闻，F10，自选 的父类
 			D.stockContent.append(stock.options);
 			
-			title.init(D);
+			title.init(D , stock);
 			nav.init(D , stock);
+			
+			stock.child = {
+				 title : title
+				,content : stock.options
+				,nav : nav
+			}
 			
 			stock.item = nav.item;
 		}
