@@ -5,6 +5,7 @@ define([
 	,'./search'
 	,'./stock'
 	,'./myMenu'
+	,'modules/stockData'
 ]
 ,function(
 	 $
@@ -16,7 +17,6 @@ define([
 ){
 	var D = {
 		init : function( obj ){
-			
 			D.create(obj)
 			
 		}
@@ -65,7 +65,7 @@ define([
 			D.update();
 			D.goTab(1);
 			
-			stock.resize( D );
+			//stock.resize( D );
 			myMenu.resize( D );
 		}
 		,updateTab : function(){ //更新最外层 tab //搜索 股票，其他 的宽度

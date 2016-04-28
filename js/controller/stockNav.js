@@ -4,31 +4,32 @@ define([
 	,'./news'
 	,'./f10'
 	,'./select'
-],function( navHTML , price , news , f10 , selector  ){
+],function( navHTML , price , news , f10 , selector   ){
 	var nav = {
 		init : function( D , stock ){
 			nav.parentElement = D.stockContent;
 			nav.options = stock.options; // 分时，新闻，F10，自选 的父类
 			nav.Dome = $(navHTML);
 			
-			nav.setElement();
+			nav.setElement( D );
 			
 			
 			nav.navEvent();
 		}
-		,resize : function( D ){
+		,resize : function( D , stockData ){
 			nav.width = D.width;
 			nav.height = D.height;
 			
 			nav.updateItem();
 			
 			price.resize( D );
+			
 			news.resize( D );
 			f10.resize( D );
 			selector.resize( D );
 		}
-		,setElement : function(){
-			price.init(nav);
+		,setElement : function( D ){
+			price.init( D , nav);
 			news.init(nav);
 			f10.init(nav);
 			selector.init(nav);
@@ -45,7 +46,8 @@ define([
 				,item = nav.item
 				,parentHeight = parent.height();
 			
-			item.css3({width:width+'px',height:parentHeight+'px'});
+			//item.css3({width:width+'px',height:parentHeight+'px'});
+			item.css3({width:width+'px'});
 		}
 		,show : function(){ //添加栏目
 			nav.Dome.appendTo(nav.parentElement);

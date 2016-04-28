@@ -22,7 +22,7 @@ time,menu,nav{ display:block;}
  
 .stock-content{ position:relative; z-index:9; width:100%; height:100%; overflow:hidden; transition-duration:.5s; -webkit-transition-duration:.5s; perspective:600px; -webkit-perspective:600px; background:#ececec;}
 .stock-content .options{ width:1299px; position:relative; z-index:1; display:box; display:-webkit-box; box-flex:1; -webkit-box-flex:1; transition-duration:.5s; -webkit-transition-duration:.5s; background:#ececec; perspective:600px; -webkit-perspective:600px; }
-.stock-content .option{ float:left; display:box; display:-webkit-box; width:375px; height:640px; margin-right:20px; transition-duration:.3s; -webkit-transition-duration:.3s; background:#fff;  perspective:600px; -webkit-perspective:600px;}
+.stock-content .option{ float:left; display:box; display:-webkit-box; width:375px;  margin-right:20px; transition-duration:.3s; -webkit-transition-duration:.3s; background:#fff;  perspective:600px; -webkit-perspective:600px;}
 .stock-column{ position:fixed; z-index:8; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,.1); box-shadow:-4px 0 4px rgba(0,0,0,.1) inset; display:box; box-pack:center; box-align: center;  display:-webkit-box; -webkit-box-pack:center;  -webkit-box-align: center;}
 .stock-mask{ position:fixed; z-index:8; left:0; top:0; width:60%; height:100%; box-shadow:-5px 0 5px #ccc inset; background:rgba(0,0,0,.5); transition-duration:.5s; -webkit-transition-duration:.5s; opacity:0; }
 

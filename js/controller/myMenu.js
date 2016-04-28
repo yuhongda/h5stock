@@ -3,7 +3,7 @@ define([
 	,'./stockTitle'
 	,'./stocknav'
 	,'main/moveEvent'
-],function( HTML , title , nav , Move  ){
+],function( HTML , title , nav , Move ){
 	/**
 		1、自选显示或隐藏
 		2、买卖
@@ -37,6 +37,7 @@ define([
 	}
 	,G = {
 		init : function( D ){
+			G.parent = D;
 			G.parentElement = D.wapper;
 			G.content = D.content
 			G.stockContent = D.stockContent
@@ -148,20 +149,21 @@ define([
 			}else{
 				M.hideNav();
 			}
+			G.parent.resize();
 		}
 		,navList : null
 		,addcolumn : function(){
 			var nav = $(['<div><p>显示标题</p>'
 					,'<p>显示栏目</p>'
-					,'<p>显示买卖5档</p>'
-					,'<p>我要分享</p>'
+					//,'<p>显示买卖5档</p>'
+					//,'<p>我要分享</p>'
 					,'<p>搜索</p>'
 				,'</div>'].join(''))
 				,status
 				,name;
 			M.navList = nav.find('p');
 			M.navs = {
-				title : M.navList.eq(0)
+				 title : M.navList.eq(0)
 				,nav : M.navList.eq(1)
 				,maimai : M.navList.eq(2)
 				,share : M.navList.eq(3)
@@ -220,19 +222,15 @@ define([
 		}
 		,showNav : function(){
 			nav.show();
-			//Dome.resize();
 		}
 		,hideNav : function(){
 			nav.hide();
-			//Dome.resize();
 		}
 		,showTitle : function(){
 			title.show();
-			//Dome.resize();
 		}
 		,hideTitle : function(){
 			title.hide();
-			//Dome.resize();
 		}
 		,select : {//自选
 			

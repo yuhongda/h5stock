@@ -1,9 +1,9 @@
-define(['text!views/draw-stock.html'],function( HTML ){
+define(['text!views/draw-stock.html','modules/stockData'],function( HTML , stockData ){
 // type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 	var doc = document,
 	round = Math.round , ceil = Math.ceil , floor = Math.floor , abs = Math.abs , 
 	fixed = function( a , n ){if(typeof a=='string') return a; return parseFloat(a).toFixed(n||2)}
-	cache = {
+	cache = { //存储 分时K线等
 		// p : 分时{max , min} //价格 最大值，最小值 画分时的时候 按 p.max p.min 作参考
 		// k : k线{max,min}
 		//,av : {max , min} //均价
@@ -133,20 +133,27 @@ define(['text!views/draw-stock.html'],function( HTML ){
 		}
 	},
 	G = { // 模块，公共事件 , tab切换等
-		init : function( nav ){
+		init : function( D , nav ){
 			G.parentElement = nav.options;
 			G.Dome = $(HTML);
 			G.parentElement.append(G.Dome);
+			G.wapper = D.wapper;
+			G.parent = D;
+			
 			G.setElement();
 			C.init(); //画图工具
 			G.tabEvent();
+			G.animation();
 		}
+		,resizeTime : 0
 		,resize : function( D ){
 			G.width = D.width;
 			G.height = D.height;
+			
 			G.updateCanvas();
-			M.resize();
-			G.animation();
+			
+			clearTimeout(G.resizeTime);
+			G.resizeTime = setTimeout(C.resize,300);
 		}
 		,updateCanvas : function(){ //更新 分时 日K 周K 月K 的尺寸
 			var  width = G.width
@@ -154,8 +161,11 @@ define(['text!views/draw-stock.html'],function( HTML ){
 				,box = G.element.canvasBox.box
 				,len = 4  // box 中的绘图 分时 日K 周K 月K 共4个
 				,gap = parseInt(G.element.canvasBox.canvas.ptime.elem.css('margin-right'))
+				,cur = G.element.stockNav.cur //分时K线栏目当前状态的位置
 			
 			box.width(width*len+gap*len+999);
+			
+			cur.css3({transform:'translate3d('+(width/G.element.stockNav.li.length*C.site)+'px,0,0)'})
 		}
 		,tabEvent : function(){
 			var  nav = G.element.stockNav.li
@@ -201,14 +211,14 @@ define(['text!views/draw-stock.html'],function( HTML ){
 				
 			//ma.css({width:D.width-20+'px'})
 			if(!G.currentCanvasTab){
-				M.clearCanvas( index );
+				C.clearCanvas( index );
 				line.css3({opacity:0,transform:'translateY(-100px)'});
 				time.css3({opacity:0});
 				ma.css3({opacity:0,transform:'translateY(50px)'});
 				top.css3({opacity:0,transform:'scaleY(.5) rotateX(100deg)'});
 				setTimeout(function(){
 					
-					M.resize(index);
+					C.resize(index);
 					
 					var j = 0;
 					for( i in canvas ){
@@ -363,9 +373,7 @@ define(['text!views/draw-stock.html'],function( HTML ){
 		,blue : '#005dd8'
 		,purple : '#ef00ff'
 		,yellow : '#f39900'
-		,type : 's' //i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 		,line_w : 242 //允许画线条的宽度
-		,keyword : '000001'
 		,site : 0 //0,1,2,3,4  分时，日K，月K，周K
 		,canvasName : [] //["ptime", "day", "week", "month"]
 		,canvas : {}
@@ -376,7 +384,7 @@ define(['text!views/draw-stock.html'],function( HTML ){
 		}
 		,init : function(){
 			var  obj = G.element , key 
-				,dome = obj.elem;
+				,dome = G.wapper;
 				
 			C.head = obj.top.li;
 			C.pic = obj.canvasBox.elem;
@@ -410,7 +418,14 @@ define(['text!views/draw-stock.html'],function( HTML ){
 			
 			//C.title = obj.title.name;
 		}
-		,search : function( ){
+		,resize : function( i ){
+			C.site = void 0 == i?C.site:i;
+			var  ele = G.element
+				,box = ele.canvasBox.box
+				,gap = parseInt(ele.canvasBox.canvas.ptime.elem.css('margin-right'))
+				,left = -ele.canvasBox.elem.width()*C.site-gap*C.site;
+			box.css3({transform:'translate3d('+left+'px,0,0)'});
+			console.log(left)
 			clearTimeout(C.search_time);
 			C.move_draw_top = null;
 			C.move_draw_footer = null;
@@ -422,64 +437,51 @@ define(['text!views/draw-stock.html'],function( HTML ){
 				C.move_draw_footer = Tool.move_draw_footer;
 				C.move_draw_kline = Tool.move_draw_kline;
 				C.move_draw_ma = Tool.move_draw_ma;
-				var id = Math.random()*(999)*1000;
+				
 				C.canvasBox = C.canvas[C.canvasName[C.site]];
-				if(cache.p){
-					C.resize();
-				}else{
-					try{d
-						T.js('http://flashdata2.jrj.com.cn/today/js/mQuote/'+C.type+'/'+C.keyword+'.js?stockstarID='+id,function(){
-							C.format_date( Data );
-							C.resize();
-						})
-					}catch(e){
-						require(['./data'],function(){
-							C.format_date( Data );
-							C.resize();
-						});
+				
+				stockData.getData(function( data ){
+					C.D = data;
+					
+					C.w = C.pic[0].clientWidth;
+					C.h = C.pic[0].clientHeight;
+					
+					$.each(C.canvasName,function( i , name){
+						G.element.canvasBox.canvas[name].elem.css({width:C.w,height:C.h})
+					});
+					var  th = round(C.h*.75)
+						,fh = round(C.h - th)
+						,isPlan;
+					
+					C.canvasWidth = C.w;
+					C.canvasTopHeight = th;
+					C.canvasBottomHeight = fh;
+					
+					C.h_line.hide()
+					C.v_line.hide();
+					C.draw_top_border(C.w , th);
+					C.draw_ft_border(C.w , fh);
+					
+					C.get_line();
+					
+					//G.get_news();
+					//G.get_f10();
+					isPlan = (C.key == 'timePlan')
+					if( isPlan ){
+						C.max = cache.p.max
+						C.min = cache.p.min
+					}else{
+						C.max = cache.dk.max
+						C.min = cache.dk.min
 					}
-				}
+					C.guides(th);
+					
+					C.default_data();
+					C.update_footer();
+				});
 			},300);
-		}
-		,resize : function(){
-			C.w = C.pic[0].clientWidth;
-			C.h = C.pic[0].clientHeight;
-			
-			$.each(C.canvasName,function( i , name){
-				G.element.canvasBox.canvas[name].elem.css({width:C.w,height:C.h})
-			});
-			
-			var  th = round(C.h*.75)
-				,fh = round(C.h - th)
-				,isPlan;
-			
-			C.canvasWidth = C.w;
-			C.canvasTopHeight = th;
-			C.canvasBottomHeight = fh;
-			
-			C.h_line.hide()
-			C.v_line.hide();
-			C.draw_top_border(C.w , th);
-			C.draw_ft_border(C.w , fh);
-			
-			C.get_line();
-			
-			//G.get_news();
-			//G.get_f10();
-			isPlan = (C.key == 'timePlan')
-			if( isPlan ){
-				C.max = cache.p.max
-				C.min = cache.p.min
-			}else{
-				C.max = cache.dk.max
-				C.min = cache.dk.min
-			}
-			C.guides(th);
 			
 			
-			
-			C.default_data();
-			C.update_footer();
 		}
 		,clearCanvas : function( i ){ //清除所有
 			var  canvas = C.canvas[C.canvasName[i]] 
@@ -543,39 +545,6 @@ define(['text!views/draw-stock.html'],function( HTML ){
 			]
 			top[0]= parseFloat(dis.open) == 0?'停牌':top[0]
 			C.update_head(top);
-		}
-		,format_date : function( Data ){ //时间，价格，均价，换手率，成交量，涨幅，涨跌
-			var  D = Data 
-				,name = ['timePlan','dailyK','weekK','monthK']
-				,dis = D.display;
-			if(!dis) return M.search()
-			if(typeof dis.timePlan != 'string') return
-			function mat( dis ){
-				$.each(name,function( n ){
-					var arr = [] ;
-					$.each(dis[name[n]].split(';'),function( i ){
-						arr[i] = this.split(',');
-						if( n == 0 ){ //分时
-							$.each(arr[i],function( k ){
-								if( k!=0 && k!=2  ){//&& k!=5
-									if(k==5){
-										arr[i][k] = parseFloat(this);
-									}else{
-										arr[i][k] = parseFloat(this);
-									}
-								}
-							})
-						}
-					})
-					dis[name[n]] = arr;
-				})
-			}
-			mat(dis)
-			dis.dailyK = dis.dailyK.slice(20) //20为ma20 需要的数，所以从第20个算起同步百度
-			dis.weekK = dis.weekK.slice(20)
-			dis.monthK = dis.monthK.slice(20);
-			C.D = D;
-			//G.element.title.name.html('<a href="'+dis.stockurl+'">'+dis.stockname + '[' + dis.stocknum +'] 证券之星</a>')
 		}
 		,guides : function( h ){ //参考线
 			function fix(max,min){
@@ -737,7 +706,7 @@ define(['text!views/draw-stock.html'],function( HTML ){
 			return {arr:D,n:n,len:len,lw:lw,max:max,min:min,close:close};
 		}
 		,share : function(){ //分时
-			var  D = Data  //时间，价格，均价，换手率，成交量，涨幅，涨跌
+			var  D = C.D  //时间，价格，均价，换手率，成交量，涨幅，涨跌
 				,dis = D.display
 				,plan = dis.timePlan
 			C.line_w = 242;
@@ -1000,165 +969,6 @@ define(['text!views/draw-stock.html'],function( HTML ){
 			var index = 0 ;
 			try{C.move_draw_kline( obj , box , index );}catch(e){}
 		}
-	}
-	M = {
-		 tab : 'kline' //,'news','f10'
-		//,refresh : $.get('#mohe-mb_stock h2 span')
-		//,nav : $.get('#mohe-mb_stock nav li')
-		//,news : $.get('article.content .news')
-		//,kline : $.get('article.content .kline')
-		//,f10 : $.get('article.content .f10')
-		,init : function(){
-			//C.init(); //画图工具
-			//M.selector = G.element.selector.add;
-			//M.select.init();
-		}
-		,search : function( name , type  ){ //用于搜索
-			C.keyword = name || '000001'
-			C.type = type || 's'
-			C.search()
-		}
-		,clearCanvas : function( index ){
-			C.clearCanvas(index);
-		}
-		,resize : function( i ){
-			C.site = void 0 == i?C.site:i;
-			var  ele = G.element
-				,box = ele.canvasBox.box
-				,gap = parseInt(ele.canvasBox.canvas.ptime.elem.css('margin-right'))
-				,left = -ele.canvasBox.elem.width()*C.site-gap*C.site;
-			box.css3({transform:'translate3d('+left+'px,0,0)'});
-			C.search();
-		}
-		,updateNav : function( n ){ //更新栏目 新闻 公司资料 自选
-			switch(n){
-				case 0 : //走势图
-					
-					break; 
-				case 1 : // 新闻
-					break; 
-				case 2 : // 公司资料
-					break;
-				case 3 : // 自选
-					M.select.update();
-					break;
-			}
-		}
-		,select : { //自选
-			init : function(){
-				M.selector.click(function( e ){
-					e.stopPropagation();
-					var self = $(this);
-					self.css3({opacity:0,transform:'translate(100px,100px)'});
-					setTimeout(function(){
-						self.hide();
-						M.select.add();
-					},350);
-				});
-				M.select.get();
-			}
-			,set : function( arr ){
-				T.set_stor( 'stockSelect'  , JSON.stringify(arr) );
-			}
-			,get : function(){
-				return JSON.parse(T.get_stor('stockSelect'));
-			}
-			,del : function(){
-				
-			}
-			,add :function(){
-				var  Data = C.D
-					,type = C.type
-					,dis = Data.display
-					,name = dis.stockname
-					,code = dis.stocknum
-					,arr = M.select.get() || [];
-				
-				arr.push({
-					 name : name
-					,code : code
-					,type : type
-					,pl : dis.fluctuation //涨幅
-					,vl : dis.lowPrice //总手
-				});
-				M.select.set(arr);
-				//,transactionPrice : 12.55 //交易价格
-				//,highPrice : 12.69  //最高
-				//,lowPrice : 12.45  //最低
-				//,Volume : 430343   //总手
-				//,Economy : '0.77%'  // 收益率
-				//,range : '-1.34%' //涨跌幅
-				//,fluctuation : '-0.17' //涨跌 差价
-				//,averagePrice : 12.57 //平均
-			}
-			,update : function(){ //每点击一次，便更新
-				var  list = G.element.selector.list
-					,sel = M.select.get()
-					,codes = '' , str = '';
-				$.each(sel,function( i , obj ){
-					codes += obj.code + ','
-				})
-				
-				$.ajax({
-					 url : 'http://q.jrjimg.cn/?q=cn|'+C.type+'&n=objInt&c=code,name,np,hp,lp,hlp,pl,tm&i='+codes
-					,dataType : 'jsonp'
-					,complete : function( ){
-						var obj = objInt;
-						$.each(obj.HqData,function(i,ele){
-							var  code = ele[obj.Column.code]
-								,name = ele[obj.Column.name]
-								,hp = ele[obj.Column.hp] //最高
-								,lp = ele[obj.Column.lp] //最低
-								,np = ele[obj.Column.np] //最新
-								,tm = ele[obj.Column.tm] //总手
-								,hlp = ele[obj.Column.hlp] //涨跌
-								,pl = ele[obj.Column.pl]; //涨幅
-							
-							pl	= pl==0?pl+'%':pl>0?'<span class="red">'+pl+'%</span>':'<span class="green">'+pl+'%</span>'
-							//hlp	= hlp==0?hlp:hlp>0?'<span class="red">'+hlp+'</span>':'<span class="green">'+hlp+'</span>'
-							tm = (tm/1000).toFixed(2)+'万手'
-							
-							str += '<ul><li>'+name+'</li>' //名称
-								+'<li>'+np+'</li>' 
-								+'<li>'+pl+'</li>'
-								//+'<li>'+hlp+'</li>'
-								+'<li>'+tm+'</li>'
-								+'<li><span class="add" data-index='+i+'>-</span></li></ul>';
-
-						});
-						list.html(str);
-						list.find('.add').unbind().bind('click',function(){
-							var index = $(this).attr('data-index')
-								,data = obj.HqData[index]
-							alert(data[0])
-						})
-					}
-				})
-				
-			}
-		}
-		,getName : function(){
-			var  type = M.getPara('type')
-				,code = M.getPara('code')
-			if(!type||type!='i'&&type!='IF'){
-				type = 's'
-			}
-			M.search(code,type);
-		}
-		,getPara: function(paraName){ 
-			var str=window.location.href;
-			if (str.indexOf(paraName)!=-1){
-				var pos_start=str.indexOf(paraName)+paraName.length+1;
-				var pos_end=str.indexOf("&",pos_start);
-			
-				if (pos_end==-1){
-				   return str.substring(pos_start);
-				}else{
-				   return str.substring(pos_start,pos_end)
-				}
-			 }
-			 else{return '';}
-		}
-	}
+	};
 	return G;
 });

@@ -2,7 +2,6 @@ define([
 	'text!views/stock.html'
 	,'./stockTitle'
 	,'./stocknav'
-	
 ]
 ,function( 
 	 options 
@@ -10,7 +9,6 @@ define([
 	,nav
 ){
 	var stock = {
-		
 		init : function( D ){
 			stock.parentElement = D.stockContent;
 			stock.options = $(options); //分时，新闻，F10，自选 的父类
@@ -21,7 +19,7 @@ define([
 			
 			stock.child = {
 				 title : title
-				,content : stock.options
+				,content : D.stockContent
 				,nav : nav
 			}
 			
@@ -34,6 +32,7 @@ define([
 			
 			title.resize( D );
 			nav.resize( D );
+			
 		}
 		,updateOption : function(){//更新 options 尺寸
 			var  width = stock.width
@@ -42,9 +41,6 @@ define([
 				,gap = parseInt(item.eq(0).css('margin-right'));
 			
 			stock.options.width(width*len+gap*len+999);
-		}
-		,getCode : function(){ //获取股票代码
-			
 		}
 	}
 	
