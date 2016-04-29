@@ -3,7 +3,10 @@ define([
 	,'./stockTitle'
 	,'./stocknav'
 	,'main/moveEvent'
-],function( HTML , title , nav , Move ){
+	,'./stock'
+	,'require'
+],function( HTML , title , nav , Move  , stock , require ){
+	//var dome = require('controller/dome');
 	/**
 		1、自选显示或隐藏
 		2、买卖
@@ -182,26 +185,26 @@ define([
 							name = 'Nav'
 							break;
 						}
-						case 2 : { //显示买卖5档
-							
+						case 2 : { //搜索
+							require('./dome').goTab(1);
+							M.menuClick = true;
+							M.hide();
 							break;
 						}
 						case 3 : { //我要分享
 							
 							break;
 						}
-						case 4 :{ //搜索
-							Dome.goTab(0);
-							M.menuClick = true;
-							M.hide();
+						case 4 :{ //显示买卖5档
+							
 						}
 					};
 					if(i==0 || i==1 ){
 						status = Tool['get'+name]();
 						status = !status;
 						Tool['set'+name](status);
+						M.update();
 					}
-					M.update();
 				});
 			});
 			

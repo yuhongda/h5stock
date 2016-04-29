@@ -425,7 +425,7 @@ define(['text!views/draw-stock.html','modules/stockData'],function( HTML , stock
 				,gap = parseInt(ele.canvasBox.canvas.ptime.elem.css('margin-right'))
 				,left = -ele.canvasBox.elem.width()*C.site-gap*C.site;
 			box.css3({transform:'translate3d('+left+'px,0,0)'});
-			console.log(left)
+			//console.log(left)
 			clearTimeout(C.search_time);
 			C.move_draw_top = null;
 			C.move_draw_footer = null;

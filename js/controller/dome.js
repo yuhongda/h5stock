@@ -1,11 +1,10 @@
-define([
+define('controller/dome',[
 	'zepto'
 	,'pub'
 	,'text!views/index.html'
 	,'./search'
 	,'./stock'
 	,'./myMenu'
-	,'modules/stockData'
 ]
 ,function(
 	 $
@@ -89,6 +88,7 @@ define([
 				,left;
 				
 			left = -index*width-gap*index;
+			console.log(left)
 			
 			trans.css3({transform:'translate3d('+left+'px,0,0)'});
 			tab.each(function( i , ele ){

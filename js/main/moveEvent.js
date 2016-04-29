@@ -1,6 +1,7 @@
 define([],function(  ){
 	var Tool = {
 		setPosition : function( key , val ){ //设置图标位置
+			if(!key || !val) return;
 			T.set_stor( key  , JSON.stringify(val) )
 		}
 	} 
@@ -54,8 +55,8 @@ define([],function(  ){
 				,yPoint = e.clientY
 				//,x , y
 				,r = 32
-				,w = M.width - r
-				,h = M.height - r;
+				,w = self.parentElement.width() - r
+				,h = self.parentElement.height() - r;
 			//x = Math.abs( xPoint - this.firstX );
 			//y = Math.abs( yPoint - this.firstY );
 			

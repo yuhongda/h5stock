@@ -38,7 +38,13 @@ define([
 			nav.item = $(price.Dome).add(news.Dome).add(f10.Dome).add(selector.Dome);
 			
 			nav.li = nav.Dome.find('li')
-			nav.cur = nav.Dome.find('.currentLine')
+			nav.cur = nav.Dome.find('.currentLine');
+			
+			nav.item.each(function( i , ele ){
+				var  left = -i*110
+					,left1 = -i*56
+				$(this).css3({transform:'translate3d(0px,0px, '+left+'px) rotateY('+left1+'deg)'})
+			});
 		}
 		,updateItem : function(){//更新 options 尺寸
 			var  width = nav.width
@@ -48,6 +54,8 @@ define([
 			
 			//item.css3({width:width+'px',height:parentHeight+'px'});
 			item.css3({width:width+'px'});
+			
+			
 		}
 		,show : function(){ //添加栏目
 			nav.Dome.appendTo(nav.parentElement);

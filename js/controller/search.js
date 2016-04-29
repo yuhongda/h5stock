@@ -1,3 +1,5 @@
-define(['zepto'],function(){
+define([],function(){
+	
+	return;
 	
 });

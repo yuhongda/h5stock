@@ -1,22 +1,35 @@
-define(['text!views/select.html'],function( HTSL ){
+define([
+	'text!views/select.html'
+	,'./price'
+	,'modules/stockData'
+],function( HTML , price , Data ){
 	var S = {
 		init : function( nav ){
 			
 			S.parentElement = nav.options;
-			S.Dome = $(HTSL);
+			S.Dome = $(HTML);
+			S.list = S.Dome.find('ul.cnt');
 			S.parentElement.append(S.Dome);
 			
-			return;
+			S.btnParentElemnt = price.element.canvasBox.elem;
+			S.selector = $('<div class="add-stock">+自选</div>')
+			S.selector.appendTo(S.btnParentElemnt);
+			
+			setTimeout(function(){
+				S.selector.css({opacity:1})
+			},1000);
+			
 			S.selector.click(function( e ){
 				e.stopPropagation();
 				var self = $(this);
 				self.css3({opacity:0,transform:'translate(100px,100px)'});
 				setTimeout(function(){
 					self.hide();
-					S.select.add();
+					S.add();
 				},350);
+				return false;
 			});
-			S.select.get();
+			S.get();
 		}
 		,resize : function(){
 			
@@ -31,21 +44,29 @@ define(['text!views/select.html'],function( HTSL ){
 			
 		}
 		,add :function(){
-			var  Data = C.D
-				,type = C.type
-				,dis = Data.display
+			var  type = Data.type
+				,dis = Data.Data.display
 				,name = dis.stockname
 				,code = dis.stocknum
-				,arr = S.select.get() || [];
-			
-			arr.push({
-				 name : name
-				,code : code
-				,type : type
-				,pl : dis.fluctuation //涨幅
-				,vl : dis.lowPrice //总手
+				,isSelect = false
+				,arr = S.get() || [];
+				
+			$.each(arr,function( i , obj ){
+				if( obj.code == code ){
+					isSelect = true;
+				}
 			});
-			S.select.set(arr);
+			
+			if(isSelect == false){
+				arr.push({
+					 name : name
+					,code : code
+					,type : type
+					,pl : dis.fluctuation //涨幅
+					,vl : dis.lowPrice //总手
+				});
+				S.set(arr);
+			}
 			//,transactionPrice : 12.55 //交易价格
 			//,highPrice : 12.69  //最高
 			//,lowPrice : 12.45  //最低
@@ -56,15 +77,15 @@ define(['text!views/select.html'],function( HTSL ){
 			//,averagePrice : 12.57 //平均
 		}
 		,update : function(){ //每点击一次，便更新
-			var  list = G.element.selector.list
-				,sel = S.select.get()
+			var  list = S.list
+				,sel = S.get()
 				,codes = '' , str = '';
 			$.each(sel,function( i , obj ){
 				codes += obj.code + ','
-			})
+			});
 			
 			$.ajax({
-				 url : 'http://q.jrjimg.cn/?q=cn|'+C.type+'&n=objInt&c=code,name,np,hp,lp,hlp,pl,tm&i='+codes
+				 url : 'http://q.jrjimg.cn/?q=cn|s&n=objInt&c=code,name,np,hp,lp,hlp,pl,tm&i='+codes
 				,dataType : 'jsonp'
 				,complete : function( ){
 					var obj = objInt;

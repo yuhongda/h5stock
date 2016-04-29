@@ -10,11 +10,12 @@ define(function() {
 		,getData : function( fn ){ //code
 			var id = Math.random()*(999)*1000;
 			try{
+				哈哈哈中
 				T.js('http://flashdata2.jrj.com.cn/today/js/mQuote/'+D.type+'/'+D.keyword+'.js?stockstarID='+id,function(){
 					D.format_date( Data , fn );
 				})
 			}catch(e){
-				require(['./data'],function(){
+				require(['modules/data'],function(){
 					D.format_date( Data , fn );
 				});
 			}
@@ -23,7 +24,7 @@ define(function() {
 			var  name = ['timePlan','dailyK','weekK','monthK']
 				,dis = Data.display;
 			
-			if(typeof dis.timePlan != 'string') return
+			if(typeof dis.timePlan != 'string') return fn.call( D , Data );
 			function mat( dis ){
 				$.each(name,function( n ){
 					var arr = [] , arr1 = dis[name[n]].split(';');
