@@ -2,17 +2,17 @@ define('controller/dome',[
 	'zepto'
 	,'pub'
 	,'text!views/index.html'
-	,'./search'
 	,'./stock'
 	,'./myMenu'
+	,'./search'
 ]
 ,function(
 	 $
 	,T 
 	,dome 
-	,search 
 	,stock 
 	,myMenu
+	,search
 ){
 	var D = {
 		init : function( obj ){
@@ -42,6 +42,7 @@ define('controller/dome',[
 			D.update();
 			
 			stock.init( D );
+			search.init( D );
 			myMenu.init( D ); 
 			
 			D.tab.each(function( i , ele ){
@@ -64,8 +65,8 @@ define('controller/dome',[
 			D.update();
 			D.goTab(1);
 			
-			//stock.resize( D );
 			myMenu.resize( D );
+			search.resize( D );
 		}
 		,updateTab : function(){ //更新最外层 tab //搜索 股票，其他 的宽度
 			var  width = D.width
@@ -88,7 +89,7 @@ define('controller/dome',[
 				,left;
 				
 			left = -index*width-gap*index;
-			console.log(left)
+			//console.log(left)
 			
 			trans.css3({transform:'translate3d('+left+'px,0,0)'});
 			tab.each(function( i , ele ){

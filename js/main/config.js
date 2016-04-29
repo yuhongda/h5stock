@@ -4,7 +4,6 @@ require.config({
         'zepto': 'lib/zepto',
         'pub': 'main/global',
 		'text' : 'lib/text'
-		,'a' : 'controller/dome'
     },
 	shim: {
 		'zepto': {

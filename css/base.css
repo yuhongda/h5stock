@@ -115,14 +115,16 @@ h2.stock-h2 .name a{ color:#005dd8}
 .stock-select li{ width:20%; box-flex:1; -webkit-box-flex:1; text-align:center;}
 .stock-select .add{ display:inline-block; width:20px; height:15px; line-height:15px; border-radius:3px; text-align:center; background:rgba(0,0,0,.1); color:#666;}
 
-.stock-search{}
+.stock-search{ display:box; display:-webkit-box; box-flex:1; -webkit-box-flex:1; box-orient:vertical; -webkit-box-orient:vertical;}
 .stock-search .tit{ height:30px; padding:5px; display:box; display:-webkit-box; border-bottom:1px solid #ddd;}
 .stock-search .back{ width:50px; height:25px; line-height:25px; margin-top:2px; margin-left:3px; text-align:center; background:#e8e8e8; font-size:.75rem; color:#999; }
 .stock-search .input{ box-flex:1; -webkit-box-flex:1; height:30px; line-height:30px; padding:0 15px;}
-.stock-search .input.gray{ color:#999; font-size:.75rem;}
+.stock-search .input input{display:block; width:100%; height:30px; line-height:30px; border:none; box-sizing:border-box; -webkit-box-sizing:border-box;}
 .stock-search .close{ position:relative; z-index:1; width:20px; height:20px; margin:5px 5px 0 0 ;}
 .stock-search .close .v-line,.stock-search .close .h-line{ position:absolute; left:0; top:50%; width:100%; height:2px; margin-top:-1px; transform:rotate(45deg); -webkit-transform:rotate(45deg); background:#ccc; }
 .stock-search .close .h-line{transform:rotate(-45deg); -webkit-transform:rotate(-45deg);}
 
-.stock-search .keyboard{ background:#c9c9c9; }
+.stock-search .list{ box-flex:1; -webkit-box-flex:1; }
+
+
 

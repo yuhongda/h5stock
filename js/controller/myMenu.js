@@ -4,9 +4,8 @@ define([
 	,'./stocknav'
 	,'main/moveEvent'
 	,'./stock'
-	,'require'
-],function( HTML , title , nav , Move  , stock , require ){
-	//var dome = require('controller/dome');
+	,'./search'
+],function( HTML , title , nav , Move  , stock , search ){
 	/**
 		1、自选显示或隐藏
 		2、买卖
@@ -186,7 +185,7 @@ define([
 							break;
 						}
 						case 2 : { //搜索
-							require('./dome').goTab(1);
+							G.parent.goTab(0);
 							M.menuClick = true;
 							M.hide();
 							break;
