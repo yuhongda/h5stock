@@ -28,9 +28,9 @@
 			}
 			document.documentElement.style.webkitTouchCallout = "none"; //禁止弹出菜单
 			document.documentElement.style.webkitUserSelect = "none";	//禁止选中 */
-			T.myAddListener([win],'mousedown',function(e){T.getEvent(e)});
-			T.myAddListener([win],'mousemove',function(e){T.getEvent(e)});
-			T.myAddListener([win],'mouseup',function(e){T.getEvent(e)});
+			//T.myAddListener([win],'mousedown',function(e){T.getEvent(e)});
+			//T.myAddListener([win],'mousemove',function(e){T.getEvent(e)});
+			//T.myAddListener([win],'mouseup',function(e){T.getEvent(e)});
 		}
 		,isbrowser : function(){
 			var ua = navigator.userAgent;
@@ -57,7 +57,7 @@
 				$(win).bind('orientationchange resize',T.resizeChange);
 			},300);
 		}
-		,js : function(a,fn){
+		,getScript : function(a,fn){
 			a = typeof a=='string'?[a]:a
 			var head = doc.head;
 			$.each(a,function(i){				

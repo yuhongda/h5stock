@@ -1,5 +1,5 @@
 define([
-	'text!views/stock.html'
+	'views/stock'
 	,'./stockTitle'
 	,'./stocknav'
 ]

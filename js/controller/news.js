@@ -1,4 +1,4 @@
-define(['text!views/news.html'],function( HTML ,dome ){
+define(['views/news'],function( HTML ,dome ){
 	var N = {
 		init : function( nav ){
 			N.parentElement = nav.options;

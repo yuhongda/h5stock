@@ -1,7 +1,7 @@
 define('controller/dome',[
 	'zepto'
 	,'pub'
-	,'text!views/index.html'
+	,'views/index'
 	,'./stock'
 	,'./myMenu'
 	,'./search'
@@ -63,7 +63,7 @@ define('controller/dome',[
 		}
 		,resize : function(){
 			D.update();
-			D.goTab(1);
+			D.goTab(D.tabCurrent);
 			
 			myMenu.resize( D );
 			search.resize( D );
@@ -78,7 +78,7 @@ define('controller/dome',[
 			trans.width(width*len+gap*len+999);
 			tab.width(width);
 		}
-		,tabCurrent : 0
+		,tabCurrent : 1
 		,goTab : function( index ){ //要去的tab 0,1,2  //搜索 股票，其他
 			D.updateTab();
 			var  width = D.width
@@ -97,7 +97,10 @@ define('controller/dome',[
 					,left1 = ((index-i)*56)
 				$(this).css3({transform:'translate3d(0px,0px, '+left+'px) rotateY('+left1+'deg)'})
 			});
-			if(index!=1) return;
+			if(index!=1){
+				D.tabCurrent = index;
+				return;
+			} 
 			if(D.tabCurrent == index){
 				stock.resize( D );
 			}else{ // tab 3D切换时，宽度会发生变化。必需要切换完成 才可以获取尺寸

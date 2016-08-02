@@ -8,13 +8,13 @@
 <!-- QQ强制竖屏 -->
 <meta name="x5-orientation" content="portrait">
 <!-- UC强制全屏 -->
-<meta name="full-screen" content="yes">
+<!-- <meta name="full-screen" content="yes"> -->
 <!-- QQ强制全屏 -->
-<meta name="x5-fullscreen" content="true">
+<!-- <meta name="x5-fullscreen" content="true"> -->
 <!-- UC应用模式 -->
-<meta name="browsermode" content="application">
+<!-- <meta name="browsermode" content="application"> -->
 <!-- QQ应用模式 -->
-<meta name="x5-page-mode" content="app">
+<!-- <meta name="x5-page-mode" content="app"> -->
 <!-- windows phone 点击无高光 -->
 <meta name="msapplication-tap-highlight" content="no">
 <!-- 适应移动端end -->
@@ -27,11 +27,11 @@
 </div>
 </body>
 </html>
-<script src='js/require.js'></script>
-<script src='js/config.js'></script>
+<script src='js/lib/require.js'></script>
+<script src='js/main/config.js'></script>
 <script>
-require(['Dome'],function( Dome ){
-	Dome.create({
+require(['controller/dome'],function( dome ){
+	dome.init({
 		dome : $('.dome')
 	})
 });

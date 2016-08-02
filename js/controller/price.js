@@ -1,4 +1,4 @@
-define(['text!views/draw-stock.html','modules/stockData'],function( HTML , stockData ){
+define(['views/draw-stock','modules/stockData'],function( HTML , stockData ){
 // type表示i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 	var doc = document,
 	round = Math.round , ceil = Math.ceil , floor = Math.floor , abs = Math.abs , 
@@ -423,9 +423,8 @@ define(['text!views/draw-stock.html','modules/stockData'],function( HTML , stock
 			var  ele = G.element
 				,box = ele.canvasBox.box
 				,gap = parseInt(ele.canvasBox.canvas.ptime.elem.css('margin-right'))
-				,left = -ele.canvasBox.elem.width()*C.site-gap*C.site;
+				,left = -(G.width-20)*C.site-gap*C.site; //20为padding 
 			box.css3({transform:'translate3d('+left+'px,0,0)'});
-			//console.log(left)
 			clearTimeout(C.search_time);
 			C.move_draw_top = null;
 			C.move_draw_footer = null;
@@ -580,8 +579,8 @@ define(['text!views/draw-stock.html','modules/stockData'],function( HTML , stock
 				
 				C.r_line.css3({display:'box'},true)
 				cache.zf = C.max_min(C.D.display.timePlan , 5 );
-				m1 = abs(cache.zf.max);
-				m2 = abs(cache.zf.min);
+				m1 = abs(parseFloat(cache.zf.max));
+				m2 = abs(parseFloat(cache.zf.min));
 				num = m1>m2?m1:m2
 				if(m1>m2){
 					cache.zf.min = -num
@@ -596,7 +595,7 @@ define(['text!views/draw-stock.html','modules/stockData'],function( HTML , stock
 				})
 				
 				$.each(C.r_line.li,function(i){
-					this.innerHTML = abs(arr2[i])+'%';
+					this.innerHTML = abs(parseFloat(arr2[i]))+'%';
 				})
 			}
 		}
@@ -689,9 +688,12 @@ define(['text!views/draw-stock.html','modules/stockData'],function( HTML , stock
 			var  a = [] , len = D.length , zhi 
 				,num , m1 , m2
 				,lw = (C.w-2)/C.line_w; //允许画线的宽度
-			zhi = C.sort(D,n);
-			max = max || zhi[0][n]
-			min = min || zhi[len-1][n]
+			
+			if(D.length){
+				zhi = C.sort(D,n);
+				max = max || zhi[0][n]
+				min = min || zhi[len-1][n]
+			}
 			if(close != void 0){
 				close = parseFloat(close)
 				m1 = max-close;

@@ -1,16 +1,16 @@
 define([
-	'text!views/stockNav.html'
+	'views/stockNav'
 	,'./price'
 	,'./news'
 	,'./f10'
 	,'./select'
 ],function( navHTML , price , news , f10 , selector   ){
 	var nav = {
-		init : function( D , stock ){
+		 status : false
+		,init : function( D , stock ){
 			nav.parentElement = D.stockContent;
 			nav.options = stock.options; // 分时，新闻，F10，自选 的父类
 			nav.Dome = $(navHTML);
-			
 			nav.setElement( D );
 			
 			
@@ -25,20 +25,22 @@ define([
 			price.resize( D );
 			
 			news.resize( D );
-			f10.resize( D );
-			selector.resize( D );
+			f10.resize( D , nav );
+			//selector.resize( D );  //自选和新闻暂时取消了
 		}
 		,setElement : function( D ){
 			price.init( D , nav);
-			news.init(nav);
+			//news.init(nav);
 			f10.init(nav);
-			selector.init(nav);
+			//selector.init(nav);
 			
 			//分时，新闻，F10，自选
-			nav.item = $(price.Dome).add(news.Dome).add(f10.Dome).add(selector.Dome);
+			//nav.item = $(price.Dome).add(news.Dome).add(f10.Dome).add(selector.Dome);
+			nav.item = $(price.Dome).add(f10.Dome);
 			
 			nav.li = nav.Dome.find('li')
 			nav.cur = nav.Dome.find('.currentLine');
+			nav.cur.css({width:100/nav.li.length+'%'});
 			
 			nav.item.each(function( i , ele ){
 				var  left = -i*110
@@ -58,9 +60,11 @@ define([
 			
 		}
 		,show : function(){ //添加栏目
+			nav.status = true;
 			nav.Dome.appendTo(nav.parentElement);
 		}
 		,hide : function(){ //删除栏目
+			nav.status = false;
 			nav.Dome.remove();
 		}
 		,navCurrent : 0

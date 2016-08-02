@@ -1,5 +1,5 @@
 define([
-	'text!views/nav.html'
+	'views/nav'
 	,'./stockTitle'
 	,'./stocknav'
 	,'main/moveEvent'
@@ -38,7 +38,9 @@ define([
 		}
 	}
 	,G = {
-		init : function( D ){
+		 title : false  //隐藏标题
+		,nav : false //隐藏栏目 
+		,init : function( D ){
 			G.parent = D;
 			G.parentElement = D.wapper;
 			G.content = D.content
@@ -138,6 +140,9 @@ define([
 		,update : function(){ //更新栏目状态
 			var  title = Tool.getTitle()
 				,nav = Tool.getNav();
+			G.title = title;
+			G.nav = nav;
+			
 			M.navList.removeClass('cur');
 			if( title == true ){
 				M.navs.title.addClass('cur');

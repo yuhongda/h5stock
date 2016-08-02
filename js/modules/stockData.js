@@ -1,19 +1,26 @@
-define(function() {
+define(['pub'],function( T ) {
 	var D = {
 		 type : 's' //i: 指数; s: 股票; IF:  股指期货 ( 默认为股票 )
 		,keyword : '000001'
 		,Data : [] //所有数据
-		,search : function( name , type  ){ //用于搜索
+		,search : function( name , type , fn  ){ //用于搜索
 			D.keyword = name || '000001'
-			D.type = type || 's'
+			D.type = type || 's';
+			D.getData(fn);
+		}
+		,getPrice : function( fn ){
+			var id = Math.random()*(999)*1000;
+			T.getScript('http://flashdata2.jrj.com.cn/today/js/index/'+D.keyword+'.js?stockstarID='+id,function(){
+				fn( window['Min_'+D.keyword] );
+			});
 		}
 		,getData : function( fn ){ //code
 			var id = Math.random()*(999)*1000;
 			try{
-				哈哈哈中
-				T.js('http://flashdata2.jrj.com.cn/today/js/mQuote/'+D.type+'/'+D.keyword+'.js?stockstarID='+id,function(){
-					D.format_date( Data , fn );
-				})
+				//哈哈哈中
+				T.getScript('http://flashdata2.jrj.com.cn/today/js/mQuote/'+D.type+'/'+D.keyword+'.js?stockstarID='+id,function(){
+					D.format_date( Data, fn );
+				});
 			}catch(e){
 				require(['modules/data'],function(){
 					D.format_date( Data , fn );
@@ -30,17 +37,17 @@ define(function() {
 					var arr = [] , arr1 = dis[name[n]].split(';');
 					$.each(arr1,function( i , _arr ){
 						arr[i] = _arr.split(',');
-						if( n == 0 ){ //分时
-							$.each(arr[i],function( k , val ){
-								if( k!=0 && k!=2  ){//&& k!=5
-									if(k==5){
-										arr[i][k] = parseFloat(val);
-									}else{
-										arr[i][k] = parseFloat(val);
-									}
-								}
-							})
-						}
+						//if( n == 0 ){ //分时
+						//	$.each(arr[i],function( k , val ){
+						//		if( k!=0 && k!=2  ){//&& k!=5
+						//			if(k==5){
+						//				arr[i][k] = parseFloat(val);
+						//			}else{
+						//				arr[i][k] = parseFloat(val);
+						//			}
+						//		}
+						//	})
+						//}
 					})
 					dis[name[n]] = arr;
 				})
@@ -52,7 +59,7 @@ define(function() {
 			D.Data = Data;
 			
 			//console.log(D.keyword)
-			fn.call( D , Data );
+			fn && fn.call( D , Data );
 		}
 		,getName : function(){
 			var  type = M.getPara('type')

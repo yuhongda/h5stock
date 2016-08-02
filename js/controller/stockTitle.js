@@ -1,6 +1,7 @@
-define(['text!views/stockTitle.html','modules/stockData'],function( HTML , stockData ){
+define(['views/stockTitle','modules/stockData'],function( HTML , stockData ){
 	var T = {
-		init : function(  D  ){
+		status : false
+		,init : function(  D  ){
 			T.parentElement = D.stockContent;
 			T.Dome = $(HTML);
 			T.name = T.Dome.find('.name');
@@ -11,9 +12,11 @@ define(['text!views/stockTitle.html','modules/stockData'],function( HTML , stock
 			});
 		}
 		,show : function(){
+			T.status = true;
 			T.parentElement.prepend(T.Dome);
 		}
 		,hide : function(){
+			T.status = false;
 			T.Dome.remove();
 		}
 		,update : function( name ){

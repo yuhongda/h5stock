@@ -1,5 +1,5 @@
 define([
-	'text!views/select.html'
+	'views/select'
 	,'./price'
 	,'modules/stockData'
 ],function( HTML , price , Data ){
